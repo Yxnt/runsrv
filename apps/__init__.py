@@ -1,12 +1,17 @@
 from flask import Flask
+from apps.common import config
+
+from apps.views import hello
 
 
-def create_apps():
-    apps = Flask(__name__)
-    apps.config.from_object('config')
+apps = Flask(__name__)
 
-    from apps.main import main as main_blueprint
-    apps.register_blueprint(main_blueprint)
+def create_apps(config_name):
+
+    apps.config.from_object(config[config_name])
+
+    with apps.app_context():
+        apps.register_blueprint(hello)
 
     return apps
 
