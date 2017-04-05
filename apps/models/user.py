@@ -14,6 +14,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.NVARCHAR(93), unique=True, nullable=True)
     email = db.Column(db.NVARCHAR(50), unique=True, nullable=True)
     regtime = db.Column(db.DATETIME, nullable=False)
+    status = db.Column(db.NVARCHAR(10), nullable=False)
 
     def __init__(self, username, password=None, email=None):
         self.username = username
@@ -22,6 +23,7 @@ class User(UserMixin, db.Model):
         self.hash_password(password)
         self.email = email
         self.regtime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        self.status = "disabled"
 
     def hash_password(self,password):
         self.password = generate_password_hash(password)

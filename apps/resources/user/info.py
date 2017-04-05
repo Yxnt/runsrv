@@ -1,4 +1,4 @@
-from flask_restful import Resource, reqparse
+from flask_restful import Resource, reqparse, abort
 from flask import current_app
 from collections import OrderedDict
 from json import dumps
@@ -7,14 +7,38 @@ parse = reqparse.RequestParser()
 
 
 class Info(Resource):
-    def get(self):
-        data = OrderedDict()
-        user = current_app.User.query.all()
-        user_list = []
-        if len(user) > 0:
-            data['status'] = "success"
-            for i in user:
-                user_list.append({"username": i.username})
-            data["data"] = user_list
+    data_dict = OrderedDict()
+    user = []
+    user_list = []
 
-        return dumps(data)
+    def get(self, username=None):
+        """获取用户接口
+        :param username: 要查询的用户名
+        :return: data_dict
+        """
+        if username != None:
+            return self.__get_user(username)
+        else:
+            return current_app.make_error(500, 201, "接口异常")
+
+    def __get_user(self, username):
+        """获取用户方法
+        :param username: 要查询的用户名
+        :return: data_dict
+        """
+        user_info_dict = OrderedDict()
+        self.user = current_app.User.query.all()
+
+        if len(self.user) > 0:
+            self.data_dict['status'] = "200"
+            self.user_list.clear()
+            for i in self.user:
+                if username == i.username:
+                    user_info_dict['user'] = i.username
+                    user_info_dict['status'] = i.status
+                    self.user_list.append(user_info_dict)
+                    self.data_dict["data"] = self.user_list
+                    return dumps(self.data_dict)
+            return current_app.make_error(500, 201, "接口异常")
+        else:
+            return current_app.make_error(500, 203, "接口异常")
