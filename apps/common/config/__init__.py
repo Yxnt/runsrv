@@ -1,5 +1,4 @@
 class Config(object):
-
     pass
 
 

@@ -39,6 +39,6 @@ class Info(Resource):
                     self.user_list.append(user_info_dict)
                     self.data_dict["data"] = self.user_list
                     return dumps(self.data_dict)
-            return current_app.make_error(500, 201, "接口异常")
+            return current_app.make_res(500, 201, "接口异常")
         else:
-            return current_app.make_error(500, 203, "接口异常")
+            return current_app.make_res(500, 203, "接口异常")
