@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 from flask_restful import Resource, reqparse
 from flask_login import login_user
-from flask import current_app,url_for,redirect,request
+from flask import current_app,request
 from urllib import parse
 
 

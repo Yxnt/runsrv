@@ -1,4 +1,4 @@
-from flask_restful import Resource, reqparse, abort
+from flask_restful import Resource, reqparse
 from flask import current_app
 from collections import OrderedDict
 from json import dumps

@@ -7,7 +7,7 @@ from collections import OrderedDict
 from apps.common import config
 from apps.common.assest.assest import bundles
 from apps.common.assest import assest
-from apps.resources import userapi, Login, Info
+from apps.resources import userapi, Login, Info,Logout
 
 db = SQLAlchemy()
 login = LoginManager()
@@ -52,6 +52,7 @@ def create_apps(config_name):
 
     # RestFul
     api.add_resource(Login, '/user/login')
+    api.add_resource(Logout, '/user/logout')
     api.add_resource(Info, '/user/info/', '/user/info/<username>')
 
     # Blueprint
