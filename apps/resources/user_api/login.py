@@ -31,3 +31,5 @@ class Login(Resource):
             next_page = url_query_column.split('=')[1]
             return current_app.make_res(200,200,"登陆成功",next=next_page)
 
+        else:
+            return current_app.make_res(200,200,"登陆成功",next='/')
