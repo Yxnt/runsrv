@@ -1,0 +1,53 @@
+{% extends 'templates.html' %}
+{% block title %}
+    {{ title }}
+{% endblock %}
+{% block body_content %}
+
+
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">主机详细列表</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="工具"
+                        data-widget="chat-pane-toggle">
+                    <i class="fa fa-cogs"></i></button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+
+        <div class="box-body" style="display: block;">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>主机名</th>
+                        <th>IP</th>
+                        <th>所在地</th>
+                        <th>所属组</th>
+                        <th>操作系统</th>
+
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>测试</td>
+                        <td>127.0.0.1</td>
+                        <td>测试</td>
+                        <td>上海</td>
+                        <td>Windows</td>
+                        <td>
+                            <button class="btn btn-info btn-sm">详细信息</button>
+                            <button class="btn btn-danger btn-sm">删除</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

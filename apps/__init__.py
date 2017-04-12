@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_restful import Api, HTTPException
@@ -7,7 +7,8 @@ from collections import OrderedDict
 from apps.common import config
 from apps.common.assest.assest import bundles
 from apps.common.assest import assest
-from apps.resources import userapi, Login, Info,Logout
+from apps.resources import userapi, Login, Info, Logout, saltapi, Minions
+from json import dumps
 
 db = SQLAlchemy()
 login = LoginManager()
@@ -35,6 +36,15 @@ def make_res(status_code, message_code, message, **kwargs):
     return mes, status_code
 
 
+def save_redis(message_code, message, **kwargs):
+    mes = OrderedDict()
+    mes['status'] = message_code
+    mes['data'] = {"message": message}
+    mes['data'].update(kwargs)
+
+    return dumps(mes)
+
+
 def create_apps(config_name):
     apps = Flask(__name__)
 
@@ -54,11 +64,27 @@ def create_apps(config_name):
     api.add_resource(Login, '/user/login')
     api.add_resource(Logout, '/user/logout')
     api.add_resource(Info, '/user/info/', '/user/info/<username>')
+    api.add_resource(Minions, '/minions', '/minions/<minion>')
 
     # Blueprint
     apps.register_blueprint(userapi, url_prefix='/api')
+    apps.register_blueprint(saltapi, url_prefix='/api')
 
+    # Blueprint_view
+    from apps.views import userview
+    from apps.views import dashboard
+    from apps.views import assetsview
+    apps.register_blueprint(userview, url_prefix='/user')
+    apps.register_blueprint(dashboard)
+    apps.register_blueprint(assetsview,url_prefix='/dashboard')
 
+    @apps.errorhandler(404)  # 404 处理
+    def not_found(error):
+        return RessourceDoesNotExist()
+
+    @apps.before_first_request
+    def init():
+        apps.salt.login()
 
     with apps.app_context():
         from apps.models import User
@@ -66,16 +92,25 @@ def create_apps(config_name):
         apps.User = User
         apps.make_res = make_res
         apps.error = custom_error
+        apps.save_redis = save_redis
 
-        # Blueprint_view
-        from apps.views import userview
-        from apps.views import dashboard
-        apps.register_blueprint(userview, url_prefix='/user')
-        apps.register_blueprint(dashboard)
+        from apps.common.salt.salt import SaltApi
+        from apps.common import Redis
 
+        redis = Redis(ip=apps.config.get('REDIS_HOST'),
+                      port=apps.config.get('REDIS_PORT'),
+                      db=apps.config.get('REDIS_DB'),
+                      password=apps.config.get('REDIS_AUTH'))
 
-    @apps.errorhandler(404)  # 404 处理
-    def not_found(error):
-        return RessourceDoesNotExist()
+        s = SaltApi(user=apps.config.get('SALT_USER'),
+                    passwd=apps.config.get('SALT_PASS'),
+                    host=apps.config.get('SALT_HOST'),
+                    port=apps.config.get('SALT_PORT'),
+                    eauth=apps.config.get('SALT_EAUTH'),
+                    is_ssl=apps.config.get('SALT_SSL_ON')
+                    )
+
+        apps.redis = redis
+        apps.salt = s
 
     return apps
