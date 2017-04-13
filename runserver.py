@@ -3,14 +3,15 @@
 
 import os
 
-from apps import create_apps, db, models
+from apps import create_apps, db, models, celery
+from apps.tasks import hello
+
 from apps.models import User
-
-
-
 from flask_script import Manager
 
+
 app = create_apps(os.environ.get('FLASK_CONFIG') or 'dev')
+app.app_context().push()
 manager = Manager(app)
 
 
@@ -22,9 +23,10 @@ def create_db():
 
 @manager.command
 def create_admin():
-    admin = User('admin','123','admin@example.com')
+    admin = User('admin', '123', 'admin@example.com')
     db.session.add(admin)
     db.session.commit()
+
 
 if __name__ == '__main__':
     manager.run()

@@ -1,4 +1,4 @@
-from . import assetsview
+from apps.views.assets import assetsview
 from flask import render_template
 
 @assetsview.route('/host')

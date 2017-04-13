@@ -1,0 +1,1 @@
+from apps.tasks.test import hello

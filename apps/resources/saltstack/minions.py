@@ -8,3 +8,6 @@ class Minions(Resource):
             return current_app.salt.minions(minion=minion)
         else:
             return current_app.salt.minions()
+
+    def post(self):
+        pass

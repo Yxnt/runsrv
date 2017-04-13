@@ -2,33 +2,54 @@
 {% block title %}
     {{ title }}
 {% endblock %}
+
 {% block body_content %}
-
-
     <div class="box">
         <div class="box-header">
             <h3 class="box-title">主机详细列表</h3>
             <div class="box-tools pull-right">
                 <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                 </button>
-                <button type="button" class="btn btn-box-tool" data-toggle="tooltip" title="工具"
-                        data-widget="chat-pane-toggle">
+                <button type="button" class="btn btn-box-tool" data-toggle="dropdown" title="工具"
+                        data-widget="chat-pane-toggle" aria-haspopup="true" aria-expanded="false">
                     <i class="fa fa-cogs"></i></button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="">获取最新列表</a></li>
+                </ul>
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
             </div>
         </div>
 
         <div class="box-body" style="display: block;">
-            <div class="table-responsive">
-                <table class="table table-hover table-bordered table-striped">
-                    <thead>
+            <div class="row" style="margin-bottom: 10px;">
+
+                <div class="col-md-1 pull-left">
+                    <button class="btn btn-primary">添加主机</button>
+                </div>
+                <div class="col-md-2">
+                    <select name="group" class=" form-control">
+                        <option selected="selected">主机组</option>
+                        <option>上海</option>
+                    </select>
+                </div>
+                <div class="col-md-1 pull-right">
+                    <button class="btn btn-default ">搜索</button>
+                </div>
+                <div class="col-md-2 pull-right">
+                    <input class="form-control" type="search" placeholder="Search">
+                </div>
+            </div>
+
+            <div class="table-responsive ">
+                <table class="table table-hover table-bordered table-condensed">
+                    <thead valign="middle">
                     <tr>
                         <th>主机名</th>
                         <th>IP</th>
                         <th>所在地</th>
                         <th>所属组</th>
                         <th>操作系统</th>
-
+                        <th>主机状态</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -36,9 +57,22 @@
                     <tr>
                         <td>测试</td>
                         <td>127.0.0.1</td>
-                        <td>测试</td>
                         <td>上海</td>
+                        <td>测试</td>
                         <td>Windows</td>
+                        <td><span class="label label-success">UP</span></td>
+                        <td>
+                            <button class="btn btn-info btn-sm" id="more">详细信息</button>
+                            <button class="btn btn-danger btn-sm">删除</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>测试</td>
+                        <td>127.0.0.1</td>
+                        <td>上海</td>
+                        <td>测试</td>
+                        <td>Windows</td>
+                        <td><span class="label label-danger">DOWN</span></td>
                         <td>
                             <button class="btn btn-info btn-sm">详细信息</button>
                             <button class="btn btn-danger btn-sm">删除</button>
@@ -47,7 +81,11 @@
                     </tbody>
                 </table>
             </div>
-        </div>
 
+        </div>
     </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{{ url_for('static',filename='js/layer/layer.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/assets/assets.js') }}"></script>
 {% endblock %}

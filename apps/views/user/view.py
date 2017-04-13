@@ -1,4 +1,4 @@
-from . import userview
+from apps.views.user import userview
 from flask import render_template
 
 

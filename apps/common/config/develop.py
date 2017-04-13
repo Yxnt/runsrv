@@ -43,3 +43,18 @@ class DevelopMent(Config):
     REDIS_PORT = 6379
     REDIS_DB = 0
     REDIS_AUTH = 'Gmtj6KQjLmL1Q'
+
+    # celery
+    CELERY_BROKER_URL = "redis://:{PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}".format(
+        PASSWORD=REDIS_AUTH,
+        REDIS_HOST=REDIS_HOST,
+        REDIS_PORT=REDIS_PORT,
+        REDIS_DB=REDIS_DB
+    )
+    CELERY_RESULT_BACKEND = "redis://:{PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}".format(
+        PASSWORD=REDIS_AUTH,
+        REDIS_HOST=REDIS_HOST,
+        REDIS_PORT=REDIS_PORT,
+        REDIS_DB=REDIS_DB
+    )
+    CELERY_TASK_SERIALIZER = 'json'

@@ -7,8 +7,13 @@ from collections import OrderedDict
 from apps.common import config
 from apps.common.assest.assest import bundles
 from apps.common.assest import assest
-from apps.resources import userapi, Login, Info, Logout, saltapi, Minions
+
 from json import dumps
+from celery import Celery
+import os
+
+celery = Celery(__name__, broker=config[os.environ.get('FLASK_CONFIG') or 'dev'].CELERY_BROKER_URL,
+                backend=config[os.environ.get('FLASK_CONFIG') or 'dev'].CELERY_RESULT_BACKEND)
 
 db = SQLAlchemy()
 login = LoginManager()
@@ -47,10 +52,10 @@ def save_redis(message_code, message, **kwargs):
 
 def create_apps(config_name):
     apps = Flask(__name__)
-
     apps.config.from_object(config[config_name])
+
     db.init_app(apps)
-    api.init_app(userapi)
+
     assets.init_app(apps)
     assets.register(bundles)
 
@@ -60,23 +65,13 @@ def create_apps(config_name):
     login.login_message_category = "info"
     login.session_protection = "strong"
 
-    # RestFul
-    api.add_resource(Login, '/user/login')
-    api.add_resource(Logout, '/user/logout')
-    api.add_resource(Info, '/user/info/', '/user/info/<username>')
-    api.add_resource(Minions, '/minions', '/minions/<minion>')
-
-    # Blueprint
-    apps.register_blueprint(userapi, url_prefix='/api')
-    apps.register_blueprint(saltapi, url_prefix='/api')
-
     # Blueprint_view
     from apps.views import userview
     from apps.views import dashboard
     from apps.views import assetsview
     apps.register_blueprint(userview, url_prefix='/user')
     apps.register_blueprint(dashboard)
-    apps.register_blueprint(assetsview,url_prefix='/dashboard')
+    apps.register_blueprint(assetsview, url_prefix='/dashboard')
 
     @apps.errorhandler(404)  # 404 处理
     def not_found(error):
@@ -88,7 +83,21 @@ def create_apps(config_name):
 
     with apps.app_context():
         from apps.models import User
+        from apps.resources import userapi, Login, Info, Logout, saltapi, Minions
+
+        api.init_app(userapi)
+        # RestFul
+        api.add_resource(Login, '/user/login')
+        api.add_resource(Logout, '/user/logout')
+        api.add_resource(Info, '/user/info/', '/user/info/<username>')
+        api.add_resource(Minions, '/minions', '/minions/<minion>')
+
+        # Blueprint
+        apps.register_blueprint(userapi, url_prefix='/api')
+        apps.register_blueprint(saltapi, url_prefix='/api')
+
         db.Model.metadata.reflect(bind=db.engine, schema='runsrv')
+
         apps.User = User
         apps.make_res = make_res
         apps.error = custom_error
