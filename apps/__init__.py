@@ -69,9 +69,11 @@ def create_apps(config_name):
     from apps.views import userview
     from apps.views import dashboard
     from apps.views import assetsview
+    from apps.views import system
     apps.register_blueprint(userview, url_prefix='/user')
     apps.register_blueprint(dashboard)
     apps.register_blueprint(assetsview, url_prefix='/dashboard')
+    apps.register_blueprint(system, url_prefix='/dashboard')
 
     @apps.errorhandler(404)  # 404 处理
     def not_found(error):
