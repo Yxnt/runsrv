@@ -2,6 +2,10 @@
 {% block title %}
     {{ title }}
 {% endblock %}
+{% block css %}
+{{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/assets/assets.css') }}">
+{% endblock %}
 
 {% block body_content %}
     <div class="box">
@@ -27,10 +31,10 @@
                     <button class="btn btn-primary">添加主机</button>
                 </div>
                 <div class="col-md-2">
-                    <select name="group" class=" form-control">
-                        <option selected="selected">主机组</option>
-                        <option>上海</option>
-                    </select>
+{#                    <select name="group" class=" form-control">#}
+{#                        <option selected="selected">主机组</option>#}
+{#                        <option>上海</option>#}
+{#                    </select>#}
                 </div>
                 <div class="col-md-1 pull-right">
                     <button class="btn btn-default ">搜索</button>
@@ -41,46 +45,17 @@
             </div>
 
             <div class="table-responsive ">
-                <table class="table table-hover table-bordered table-condensed">
-                    <thead valign="middle">
+                <table id="hostTable" class="table table-hover table-bordered table-condensed" cellspacing="0" width="100%" >
+                    <thead>
                     <tr>
                         <th>主机名</th>
                         <th>IP</th>
-                        <th>所在地</th>
                         <th>所属组</th>
-                        <th>操作系统</th>
+                        <th>地区</th>
                         <th>主机状态</th>
                         <th>操作</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <tr>
-                        <td>测试</td>
-                        <td>127.0.0.1</td>
-                        <td>上海</td>
-                        <td>测试</td>
-                        <td>fewafafewafewafwefwafewafafeawef</td>
-                        <td><span class="label label-success">UP</span></td>
-                        <td>
-                            <button class="btn btn-info btn-sm" id="more">详细信息</button>
-                            <button class="btn btn-primary btn-sm">监控信息</button>
-                            <button class="btn btn-danger btn-sm">删除</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>测试</td>
-                        <td>127.0.0.1</td>
-                        <td>上海</td>
-                        <td>测试</td>
-                        <td>Windows</td>
-                        <td><span class="label label-danger">DOWN</span></td>
-                        <td>
-                            <button class="btn btn-info btn-sm">详细信息</button>
-                            <button class="btn btn-primary btn-sm">监控信息</button>
-                            <button class="btn btn-danger btn-sm">删除</button>
-                        </td>
-                    </tr>
-                    </tbody>
                 </table>
             </div>
 
@@ -89,5 +64,7 @@
 {% endblock %}
 {% block js %}
     <script type="text/javascript" src="{{ url_for('static',filename='js/layer/layer.js') }}"></script>
+    <script type="application/javascript"
+            src="{{ url_for('static',filename='js/datatables/datatables.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static',filename='js/assets/assets.js') }}"></script>
 {% endblock %}

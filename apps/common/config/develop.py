@@ -57,4 +57,4 @@ class DevelopMent(Config):
         REDIS_PORT=REDIS_PORT,
         REDIS_DB=REDIS_DB
     )
-    CELERY_TASK_SERIALIZER = 'json'
+#    CELERY_TASK_SERIALIZER = 'json'

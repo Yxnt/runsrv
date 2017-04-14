@@ -92,7 +92,7 @@ def create_apps(config_name):
         api.add_resource(Login, '/user/login')
         api.add_resource(Logout, '/user/logout')
         api.add_resource(Info, '/user/info/', '/user/info/<username>')
-        api.add_resource(Minions, '/minions', '/minions/<minion>')
+        api.add_resource(Minions, '/salt/minions', '/salt/minions/<minion>')
 
         # Blueprint
         apps.register_blueprint(userapi, url_prefix='/api')

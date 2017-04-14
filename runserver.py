@@ -2,13 +2,10 @@
 # -*- coding:utf-8 -*-
 
 import os
-
 from apps import create_apps, db, models, celery
-from apps.tasks import hello
-
 from apps.models import User
 from flask_script import Manager
-
+from apps.tasks import update_host_list_to_db, system_operator
 
 app = create_apps(os.environ.get('FLASK_CONFIG') or 'dev')
 app.app_context().push()

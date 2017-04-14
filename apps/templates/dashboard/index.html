@@ -17,7 +17,7 @@
 
                     <div class="info-box-content">
                         <span class="info-box-text">客户端数量</span>
-                        <span class="info-box-number">90<small>%</small></span>
+                        <span id='client_number' class="info-box-number"></span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -30,7 +30,7 @@
 
                     <div class="info-box-content">
                         <span class="info-box-text">用户数</span>
-                        <span class="info-box-number">41,410</span>
+                        <span class="info-box-number"></span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -47,7 +47,7 @@
 
                     <div class="info-box-content">
                         <span class="info-box-text">Celery 任务数</span>
-                        <span class="info-box-number">760</span>
+                        <span class="info-box-number"></span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -60,7 +60,7 @@
 
                     <div class="info-box-content">
                         <span class="info-box-text">当前登陆次数</span>
-                        <span class="info-box-number">2,000</span>
+                        <span class="info-box-number"></span>
                     </div>
                     <!-- /.info-box-content -->
                 </div>
@@ -203,34 +203,5 @@
 {% endblock %}
 {% block js %}
     <script src="{{ url_for('static',filename="js/chart/chart.js") }}"></script>
-    <script>
-
-        var ctx = $("#canvas");
-        var data = {
-            labels: [
-                "Red",
-                "Blue",
-                "Yellow"
-            ],
-            datasets: [
-                {
-                    data: [300, 50, 100],
-                    backgroundColor: [
-                        "#FF6384",
-                        "#36A2EB",
-                        "#FFCE56"
-                    ],
-                    hoverBackgroundColor: [
-                        "#FF6384",
-                        "#36A2EB",
-                        "#FFCE56"
-                    ]
-                }]
-        };
-        var myDoughnutChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: data
-
-        });
-    </script>
+    <script src="{{ url_for('static',filename="js/dashboard/index.js") }}"></script>
 {% endblock %}

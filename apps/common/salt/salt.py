@@ -75,16 +75,8 @@ class SaltApi(object):
             current_app.redis.set(self.token_name, dumps({'X-Auth-Token': self.token}), self.expirse)
             return True
 
-    def minions(self, minion=None):
-        if minion != None:
-            uri = '/minions/%s' % minion
-            return self.req(uri)
-        else:
-            minion_list = []
-            response = self.req('/minions')['return'][0]
-            for k, v in response.items():
-                minion_list.append(k)
-            return current_app.save_redis(200, '获取成功', minions=minion_list)
+    def minions(self):
+        return self.req('/minions')
 
     def keys(self):
         pass

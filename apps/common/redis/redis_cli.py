@@ -26,6 +26,12 @@ class Redis(object):
     def set(self, key, value, time):
         return self.__r().set(key, value, ex=time, nx=True)
 
+    def hset(self, name, key, value):
+        return self.__r().hset(name, key, value)
+
+    def hget(self, name, key):
+        return self.__r().hget(name, key)
+
 
 if __name__ == '__main__':
     r = redis_cli()
