@@ -6,6 +6,7 @@ import string
 class DevelopMent(Config):
     DEBUG = True
     SECRET_KEY = string.printable
+    BUNDLE_ERRORS = True
 
     # DB Setting
     DBUSER = 'test'
@@ -57,4 +58,4 @@ class DevelopMent(Config):
         REDIS_PORT=REDIS_PORT,
         REDIS_DB=REDIS_DB
     )
-#    CELERY_TASK_SERIALIZER = 'json'
+    CELERY_TASK_SERIALIZER = 'json'

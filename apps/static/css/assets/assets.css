@@ -1,7 +1,12 @@
 table{
-    border-collapse: collapse;
-    table-layout: fixed;
+    /*border-collapse: collapse;*/
+    /*table-layout: fixed;*/
 }
 td button{
     margin-right: 10px;
+}
+.form-horizontal .form-group{
+    margin-top:10px;
+    margin-right: 10px;
+    margin-left:10px;
 }

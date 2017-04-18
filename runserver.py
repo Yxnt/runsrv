@@ -5,7 +5,7 @@ import os
 from apps import create_apps, db, models, celery
 from apps.models import User
 from flask_script import Manager
-from apps.tasks import update_host_list_to_db, system_operator
+from apps.tasks import update_host_list_to_db, system_operator, redis_save, group_save, host_to_group
 
 app = create_apps(os.environ.get('FLASK_CONFIG') or 'dev')
 app.app_context().push()
@@ -20,7 +20,7 @@ def create_db():
 
 @manager.command
 def create_admin():
-    admin = User('admin', '123', 'admin@example.com')
+    admin = User('admin', '123', 'admin@example.com', status='enabled')
     db.session.add(admin)
     db.session.commit()
 

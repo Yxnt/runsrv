@@ -41,6 +41,9 @@ $(function () {
         }
 
     })
+    ajax('/api/user/info/','get',function (data) {
+        $("#user_len").text(data['data']['counter']);
+    })
 
 });
 
@@ -65,4 +68,14 @@ function doughnut_data(osinfo_list, set) {
         data.push(result[set[i]]);
     }
     return data
+}
+
+function ajax(url,type,success_func,error_func){
+    $.ajax({
+        url:url,
+        type:type,
+        accepts:"application/json",
+        success: success_func,
+        error:error_func
+    })
 }

@@ -43,7 +43,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-blue sidebar-mini">
+<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
 <div class="wrapper">
 
     <!-- Main Header -->
@@ -107,18 +107,19 @@ desired effect
             <ul class="sidebar-menu">
                 <li class="header">HEADER</li>
                 <!-- Optionally, you can add icons to the links -->
-                <li class="active"><a href={{ url_for('dashboard.index') }}><i class="fa fa-link"></i> <span>仪表盘</span></a>
+                <li class="active"><a href={{ url_for('dashboard.index') }}><i class="fa fa-dashboard"></i>
+                    <span>仪表盘</span></a>
                 </li>
-                {#                <li><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>#}
                 <li class="treeview">
-                    <a href="#"><i class="fa fa-link"></i> <span>资产管理</span>
+                    <a href="#"><i class="fa fa-laptop"></i> <span>资产管理</span>
                         <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="{{ url_for('assetsview.Host') }}">主机管理</a></li>
-                        <li><a href="#">分组管理</a></li>
+                        <li><a href="{{ url_for('assetsview.Host') }}"><i
+                                class="fa fa-circle-o"></i>主机管理</a></li>
+                        <li><a href="{{ url_for("assetsview.Group") }}"><i class="fa fa-circle-o"></i>分组管理</a></li>
                     </ul>
                 </li>
                 <li><a href="#"><i class="fa fa-link"></i> <span>系统初始化</span></a></li>
@@ -169,11 +170,26 @@ desired effect
 </div>
 <!-- ./wrapper -->
 
+<script>
+    var AdminLTEOptions = {
+        //Enable sidebar expand on hover effect for sidebar mini
+        //This option is forced to true if both the fixed layout and sidebar mini
+        //are used together
+        sidebarExpandOnHover: true,
+        //BoxRefresh Plugin
+        enableBoxRefresh: true,
+        //Bootstrap.js tooltip
+        enableBSToppltip: true
+    };
+</script>
+
 {% assets 'common_js' %}
     <script type="application/javascript" src="{{ ASSET_URL }}"></script>
 {% endassets %}
 {% block js %}
 
 {% endblock %}
+
+
 </body>
 </html>

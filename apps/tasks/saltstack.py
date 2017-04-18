@@ -28,7 +28,7 @@ def update_host_list_to_db():
         status = "UP"
         data['hostname'] = hostname
         data['ip'] = hostip
-        data['location'] = ""
+        data['location'] = "香港"
         data['osinfo'] = os
         data['group'] = ""
         data['status'] = "UP"

@@ -1,0 +1,49 @@
+{% extends 'templates.html' %}
+{% block title %}
+    {{ title }}
+{% endblock %}
+{% block css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/assets/assets.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrapselect/bootstrap-select.min.css') }}">
+{% endblock %}
+
+{% block body_content %}
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">分组列表</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            </div>
+        </div>
+
+        <div class="box-body">
+            <div class="table-responsive ">
+                <div id="toolbar" class="btn-group" style="margin-bottom: 10px;">
+                    <button id="new" type="button" class="btn btn-default">
+                        <i class="fa fa-plus-square-o"></i>
+                    </button>
+                    <button id="editor" type="button" class="btn btn-default">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                    <button id="trash" type="button" class="btn btn-default">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+                <table id="groupTable" width="100%">
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <script type="text/javascript" src="{{ url_for('static',filename='js/layer/layer.js') }}"></script>
+    <script type="application/javascript"
+            src="{{ url_for('static',filename='js/datatables/datatables.min.js') }}"></script>
+    <script type="application/javascript"
+            src="{{ url_for('static',filename='js/datatables/editor/bootstrap-table.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/assets/assets.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/bootstrapselect/bootstrap-select.min.js') }}"></script>
+{% endblock %}
