@@ -2,6 +2,7 @@ import redis
 
 
 class Redis(object):
+    """连接Redis"""
     def __init__(self, ip, port, db, password):
         self.ip = ip
         self.port = port

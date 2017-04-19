@@ -1,5 +1,9 @@
 from flask_assets import Bundle
 
+"""
+压缩资源使用
+"""
+
 bundles = {}
 
 bundles['login_css'] = Bundle(

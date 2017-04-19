@@ -6,12 +6,14 @@ from flask import current_app
 
 
 class SaltApi(object):
+    """操作Saltstack"""
     schema = None
     token = None
     expirse = None
     token_name = current_app.config['LOGIN_TOKEN_NAME']
 
     def __init__(self, user, passwd, host, port, eauth, is_ssl):
+        """初始化"""
         self.user = user
         self.passwd = passwd
         self.eauth = eauth
@@ -25,6 +27,7 @@ class SaltApi(object):
         self.url = '{schmea}://{host}:{port}'.format(schmea=self.schema, host=host, port=port)
 
     def __header(self):
+        """设置请求Header"""
         header = {
             "Accept": "application/json",
             "Content-Type": "application/json",
@@ -38,12 +41,14 @@ class SaltApi(object):
         return header
 
     def req(self, uri):
+        """Get请求接口"""
         url = urljoin.urljoin(self.url, uri)
         content = requests.get(url, headers=self.__header())
         if content.status_code == 200:
             return content.json()
 
     def reqp(self, data, header=None, uri=None):
+        """Post请求接口"""
         if uri:
             url = "{url}/{uri}".format(url=self.url, uri=uri)
         else:
@@ -60,6 +65,7 @@ class SaltApi(object):
             return content.json()
 
     def login(self):
+        """登陆接口"""
 
         data = {
             "username": self.user,

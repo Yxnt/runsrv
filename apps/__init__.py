@@ -33,21 +33,13 @@ class custom_error():
 
 
 def make_res(status_code, message_code, message, **kwargs):
+    """restful 接口返回信息"""
     mes = OrderedDict()
     mes['status'] = message_code
     mes['data'] = {"message": message}
     mes['data'].update(kwargs)
 
     return mes, status_code
-
-
-def save_redis(message_code, message, **kwargs):
-    mes = OrderedDict()
-    mes['status'] = message_code
-    mes['data'] = {"message": message}
-    mes['data'].update(kwargs)
-
-    return dumps(mes)
 
 
 def create_apps(config_name):
@@ -57,10 +49,10 @@ def create_apps(config_name):
     db.init_app(apps)
 
     assets.init_app(apps)
-    assets.register(bundles)
+    assets.register(bundles) # 初始化资源压缩
 
     login.init_app(apps)
-    login.login_view = 'userview.login'
+    login.login_view = 'userview.login' # 未登陆用户跳转
     login.login_message = u"Before operation, please login"
     login.login_message_category = "info"
     login.session_protection = "strong"
@@ -105,7 +97,6 @@ def create_apps(config_name):
         apps.User = User
         apps.make_res = make_res
         apps.error = custom_error
-        apps.save_redis = save_redis
 
         from apps.common.salt.salt import SaltApi
         from apps.common import Redis
@@ -122,7 +113,7 @@ def create_apps(config_name):
                     eauth=apps.config.get('SALT_EAUTH'),
                     is_ssl=apps.config.get('SALT_SSL_ON')
                     )
-
+        # 初始化redis，saltstack
         apps.redis = redis
         apps.salt = s
 

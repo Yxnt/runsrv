@@ -4,6 +4,9 @@ import string
 
 
 class DevelopMent(Config):
+    """
+    开发版本配置文件
+    """
     DEBUG = True
     SECRET_KEY = string.printable
     BUNDLE_ERRORS = True
