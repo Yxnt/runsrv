@@ -11,6 +11,7 @@ $(function () {
 
         var group = new groupTable();
         group.Init();
+        // group.ajax();
 
         var tool = new toolbar();
         tool.Init();
@@ -85,13 +86,20 @@ var hostTable = function () {
 var groupTable = function () {
     var tableInit = new Object();
     var table = $("#groupTable");
+
     tableInit.Init = function () {
+        table.bootstrapTable("hideLoading"); // 不显示加载内容
         table.bootstrapTable({
             classes: "table table-hover table-bordered table-condensed", // 表格样式
-
+            url: "/api/assets/group/",
+            contentType: "",
+            cache: false,
             pagination: true, // 分页
+            paginationLoop: "true",
+            smartDisplay: "false",
             sidePagination: "server", // 服务端分页
-            pageList: [5, 10, 20, 30, 50, "All"], //分页条数
+            pageSize:10,
+            pageList: [5, 10, 15, 50, 100, 200], //分页条数
 
             search: true, // 搜索
             searchOnEnterKey: true, //回车触发搜索
@@ -102,6 +110,14 @@ var groupTable = function () {
                 refresh: "fa fa-refresh"
             },
 
+            responseHandler: function (res) {
+                return {
+                    "rows": res.rows,
+                    "total": res.total
+                }
+            },
+
+
             showRefresh: true, // 显示刷新按钮
             toolbarAlign: "left", // 工具栏位置 right or left
             toolbar: "#toolbar", // 自定义工具栏
@@ -109,8 +125,8 @@ var groupTable = function () {
             selectItemName: "select", // 多选框名称
 
             columns: [{ // thead
-                checkbox: true,
-                field: "check"
+                checkbox: true
+                // field: "check"
             }, {
                 field: "groupname",
                 title: "组名"
@@ -122,18 +138,18 @@ var groupTable = function () {
                 title: "客户端数量"
             }, {
                 field: "operator",
-                title: "操作"
+                title: "操作",
+                formatter: function (value, row, index) {
+                    html = "";
+                    html += "<button class='btn btn-info btn-sm'>详细信息</button>";
+                    return html
+                }
+
             }]
 
         });
-        table.bootstrapTable("hideLoading"); // 不显示加载内容
     };
-    tableInit.ajax = function () {
-        table.bootstrapTable({
-            method:"get",
-            url:'/api/assets/group/'
-        })
-    };
+
     return tableInit;
 };
 
@@ -179,12 +195,11 @@ var toolbar = function () {
                     var groupdesc = $("input#groupdesc").val();
                     var clients = select.val();
 
-                    if (clients !== null){
-                        if (groupname !==""){
-                            var data = {name:groupname,description:groupdesc,client:clients};
-                            console.log(data);
-                            ajax('/api/assets/group/','post',data,function(data){
-                                console.log(data);
+                    if (clients !== null) {
+                        if (groupname !== "") {
+                            var data = {name: groupname, description: groupdesc, client: clients};
+
+                            ajax('/api/assets/group/', 'post', data, function (data) {
                                 layer.close(index)
                             })
                         }
@@ -200,22 +215,21 @@ var toolbar = function () {
                     select.on('show.bs.select', function () { // 下拉列表初始化
                         select.empty();
                         var data = {name: 'celery:task:system', key: 'update_host_list'};
-                        ajax('/api/salt/minions/','get',data,function (data) {
-                                var clients = data['clients'];
-                                for (var i in clients) {
-                                    client = clients[i]['hostname'];
-                                    select.append($("<option></option>").attr("value", client).text(client))
-                                }
-                                select.selectpicker('refresh');
-                            });
+                        ajax('/api/salt/minions/', 'get', data, function (data) {
+                            var clients = data['clients'];
+                            for (var i in clients) {
+                                client = clients[i]['hostname'];
+                                select.append($("<option></option>").attr("value", client).text(client))
+                            }
+                            select.selectpicker('refresh');
+                        });
                     });
                 },
-                end:function () {
-                    console.log(123)
+                end: function () {
+                    $("button[name=refresh]").click();
                 }
             });
         });
-
     };
     return tool;
 };
@@ -223,14 +237,14 @@ var toolbar = function () {
 
 function ajax(url, type, data, success_fun, error_fun) {
     var ajax = $.ajax({
-        url:url,
-        type:type,
-        data:data,
-        dataType:'json',
-        accepts:'application/json',
+        url: url,
+        type: type,
+        data: data,
+        dataType: 'json',
+        accepts: 'application/json',
         success: success_fun,
-        error:error_fun,
-        traditional:true
+        error: error_fun,
+        traditional: true
     });
     return ajax
 

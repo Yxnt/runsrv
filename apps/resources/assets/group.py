@@ -1,14 +1,29 @@
-from flask_restful import Resource, reqparse
+from flask_restful import Resource, reqparse, fields, marshal_with,marshal
 from apps.tasks import group_save
 from apps.tasks.db import host_to_group
+from apps import db
 from flask import current_app
 from apps.models import table
+
+from collections import OrderedDict
+
+res_fields = {
+    "groupname": fields.String,
+    "groupdesc": fields.String(attribute="description"),
+    "clientnumber": fields.Integer(attribute="client_numbers"),
+    # "clients":fields.List(fields.String)
+}
+
 
 class Group(Resource):
     parse = reqparse.RequestParser()
     groupname = parse.add_argument('name', type=str, help="参数错误")
     groupdesc = parse.add_argument('description', type=str, help="参数错误")
     clients = parse.add_argument('client', action='append')
+    limit = parse.add_argument("limit", type=int)
+    offset = parse.add_argument('offset', type=int)
+    order = parse.add_argument('order',type=str)
+
 
     def get(self, groupname=None):
         args = self.parse.parse_args()
@@ -16,12 +31,26 @@ class Group(Resource):
         host = table['host']
         group = table['group']
         host_to_group = table['host_group']
+        if args['offset']:
+            print(args['offset'])
+            page = args['offset']/10+1
+            print(page)
+        else:
+            page = 1
+        if args['limit']:
+            limit = args['limit']
+        else:
+            limit=10
 
-        group_data = group.query.all()
 
-        for i in group_data:
-            info = {}
-            group_id =i.group_id
+        group_all = group.query.all()
+        group_data = group.query.order_by(group.group_name.asc()).paginate(page,limit,error_out=True)
+        groups = group_data.items
+
+
+        for i in groups:
+            info = OrderedDict()
+            group_id = i.group_id
             group_name = i.group_name
             group_desc = i.group_descript
             client_number = i.group_host_counter
@@ -30,16 +59,20 @@ class Group(Resource):
             info['description'] = group_desc
             info['client_numbers'] = client_number
             info['clients'] = []
-            for l in  host_to_group_data:
+            for l in host_to_group_data:
                 host_id = l.host_id
                 host_data = host.query.filter_by(host_id=host_id).first()
                 host_name = host_data.host_name
-
                 info['clients'].append(host_name)
 
-            data.append(info)
 
-        return current_app.make_res(200,200,"获取成功",groups=data)
+            data.append(marshal(info, res_fields))
+
+        total = len(group_all)
+        rows = data
+        db.session.commit()
+
+        return current_app.make_res(200,200,"获取成功", total=total,rows=rows)
 
     def post(self):
         args = self.parse.parse_args()
@@ -48,4 +81,4 @@ class Group(Resource):
         client = args['client']
 
         group_save.delay(groupname, groupdesc, len(client))
-        host_to_group.delay(client, groupname)
+        host_to_group.apply_async((client, groupname), countdown=1)

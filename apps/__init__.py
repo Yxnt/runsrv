@@ -28,16 +28,14 @@ class RessourceDoesNotExist(HTTPException):
         return "Page_Not_Found"
 
 
-class custom_error():
-    pass
-
-
-def make_res(status_code, message_code, message, **kwargs):
+def make_res(status_code, message_code, message, total=None,rows=None,**kwargs):
     """restful 接口返回信息"""
     mes = OrderedDict()
     mes['status'] = message_code
     mes['data'] = {"message": message}
     mes['data'].update(kwargs)
+    mes['total'] = total
+    mes['rows'] = rows
 
     return mes, status_code
 
@@ -96,7 +94,6 @@ def create_apps(config_name):
 
         apps.User = User
         apps.make_res = make_res
-        apps.error = custom_error
 
         from apps.common.salt.salt import SaltApi
         from apps.common import Redis
@@ -113,6 +110,7 @@ def create_apps(config_name):
                     eauth=apps.config.get('SALT_EAUTH'),
                     is_ssl=apps.config.get('SALT_SSL_ON')
                     )
+
         # 初始化redis，saltstack
         apps.redis = redis
         apps.salt = s
