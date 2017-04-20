@@ -1,7 +1,8 @@
-from flask_restful import Resource, reqparse, abort
+from flask_restful import Resource, reqparse
 from flask import current_app
 from collections import OrderedDict
 from json import dumps
+from apps.models import User
 
 parse = reqparse.RequestParser()
 
@@ -16,10 +17,14 @@ class Info(Resource):
         :param username: 要查询的用户名
         :return: data_dict
         """
-        if username != None:
-            return self.__get_user(username)
-        else:
-            return current_app.make_error(500, 201, "接口异常")
+        if username == None:
+            userlen=len(User.query.all())
+            return current_app.make_res(200,200,"获取成功",counter=userlen)
+
+        # if username != None:
+        #     return self.__get_user(username)
+        # else:
+        #     return current_app.make_error(500, 201, "接口异常")
 
     def __get_user(self, username):
         """获取用户方法

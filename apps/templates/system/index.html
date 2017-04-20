@@ -1,0 +1,9 @@
+{% extends 'templates.html' %}
+
+{% block body_content %}
+<button id="update_host" class="btn btn-info">更新主机列表</button>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/system/system.js') }}"></script>
+{% endblock %}

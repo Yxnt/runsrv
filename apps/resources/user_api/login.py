@@ -1,7 +1,7 @@
 # -*- coding:utf-8 -*-
 from flask_restful import Resource, reqparse
 from flask_login import login_user
-from flask import current_app,url_for,redirect,request
+from flask import current_app, request
 from urllib import parse
 
 
@@ -29,7 +29,7 @@ class Login(Resource):
         url_query_column = parse.urlsplit(parse.unquote(request.referrer)).query
         if url_query_column:
             next_page = url_query_column.split('=')[1]
-            return current_app.make_res(200,200,"登陆成功",next=next_page)
+            return current_app.make_res(200, 200, "登陆成功", next=next_page)
 
         else:
-            return current_app.make_res(200,200,"登陆成功",next='/')
+            return current_app.make_res(200, 200, "登陆成功", next='/')

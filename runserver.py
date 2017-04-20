@@ -2,15 +2,13 @@
 # -*- coding:utf-8 -*-
 
 import os
-
-from apps import create_apps, db, models
+from apps import create_apps, db, models, celery
 from apps.models import User
-
-
-
 from flask_script import Manager
+from apps.tasks import update_host_list_to_db, system_operator, redis_save, group_save, host_to_group
 
-app = create_apps(os.environ.get('FLASK_CONFIG') or 'dev')
+app = create_apps(os.environ.get('FLASK_CONFIG') or 'dev') # 读取配置文件，优先从环境变量中获取配置
+app.app_context().push()
 manager = Manager(app)
 
 
@@ -22,9 +20,11 @@ def create_db():
 
 @manager.command
 def create_admin():
-    admin = User('admin','123','admin@example.com')
+    """初始化管理员账号"""
+    admin = User('admin', '123', 'admin@example.com', status='enabled')
     db.session.add(admin)
     db.session.commit()
+
 
 if __name__ == '__main__':
     manager.run()

@@ -1,6 +1,6 @@
 from datetime import datetime
-from apps import db,login
-from werkzeug.security import generate_password_hash,check_password_hash
+from apps import db, login
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 
 
@@ -16,26 +16,29 @@ class User(UserMixin, db.Model):
     regtime = db.Column(db.DATETIME, nullable=False)
     status = db.Column(db.NVARCHAR(10), nullable=False)
 
-    def __init__(self, username, password=None, email=None):
+    def __init__(self, username, password=None, email=None, status=None):
         self.username = username
         if password == None:
             password = '123'
         self.hash_password(password)
         self.email = email
         self.regtime = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        self.status = "disabled"
+        if status == None:
+            self.status = "disabled"
+        self.status = status
 
-    def hash_password(self,password):
+    def hash_password(self, password):
         self.password = generate_password_hash(password)
 
-    def verify_password(self,password):
-        return check_password_hash(self.password,password)
+    def verify_password(self, password):
+        return check_password_hash(self.password, password)
 
     def get_id(self):
         return self.user_id
 
     def is_active(self):
         pass
+
 
 @login.user_loader
 def load_user(user_id):
