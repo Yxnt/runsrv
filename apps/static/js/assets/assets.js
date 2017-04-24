@@ -311,7 +311,6 @@ function ajax(url, method, data, success_fun, error_fun) {
         traditional: true
     });
     return ajax
-
 }
 
 

@@ -63,5 +63,13 @@ class DevelopMent(Config):
     )
     CELERY_TASK_SERIALIZER = 'json'
 
+    # openfalcon Api
     OPENFALCON_QUERY_SERVER = '10.19.80.13'
     OPENFALCON_QUERY_PORT = 9966
+
+    # openfalcon DB
+    OPENFALCON_DB_ADDR=''
+    OPENFALCON_DB_PORT=3306
+    OPENFALCON_DB_USER = ''
+    OPENFALCON_DB_PASSWORD=''
+    OPENFALCON_DB_NAME=''
