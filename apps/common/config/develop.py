@@ -62,3 +62,6 @@ class DevelopMent(Config):
         REDIS_DB=REDIS_DB
     )
     CELERY_TASK_SERIALIZER = 'json'
+
+    OPENFALCON_QUERY_SERVER = '10.19.80.13'
+    OPENFALCON_QUERY_PORT = 9966

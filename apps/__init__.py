@@ -76,6 +76,7 @@ def create_apps(config_name):
     with apps.app_context():
         from apps.models import User
         from apps.resources import userapi, Login, Info, Logout, saltapi, Minions, Group, assetsapi
+        from apps.resources import falcon,Query
 
         api.init_app(userapi)
         # RestFul
@@ -84,11 +85,13 @@ def create_apps(config_name):
         api.add_resource(Info, '/user/info/', '/user/info/<username>')
         api.add_resource(Minions, '/salt/minions/', '/salt/minions/<minion>')
         api.add_resource(Group,'/assets/group/','/assets/group/<groupname>')
+        api.add_resource(Query,'/falcon/query/graph/<querypath>')
 
         # Blueprint
         apps.register_blueprint(userapi, url_prefix='/api')
         apps.register_blueprint(saltapi, url_prefix='/api')
         apps.register_blueprint(assetsapi, url_prefix='/api')
+        apps.register_blueprint(falcon, url_prefix='/api')
 
         db.Model.metadata.reflect(bind=db.engine, schema='runsrv')
 

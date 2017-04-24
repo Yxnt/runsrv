@@ -1,5 +1,6 @@
 from apps.views.assets import assetsview
-from flask import render_template
+from flask import render_template, current_app
+
 
 @assetsview.route('/host')
 def Host():

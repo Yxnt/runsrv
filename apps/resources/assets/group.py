@@ -1,8 +1,8 @@
-from flask_restful import Resource, reqparse, fields, marshal_with,marshal
+from flask_restful import Resource, reqparse, fields, marshal
 from apps.tasks import group_save
 from apps.tasks.db import host_to_group
 from apps import db
-from flask import current_app
+from flask import current_app, jsonify
 from apps.models import table
 
 from collections import OrderedDict
@@ -11,19 +11,17 @@ res_fields = {
     "groupname": fields.String,
     "groupdesc": fields.String(attribute="description"),
     "clientnumber": fields.Integer(attribute="client_numbers"),
-    # "clients":fields.List(fields.String)
 }
 
 
 class Group(Resource):
     parse = reqparse.RequestParser()
-    groupname = parse.add_argument('name', type=str, help="参数错误")
-    groupdesc = parse.add_argument('description', type=str, help="参数错误")
-    clients = parse.add_argument('client', action='append')
-    limit = parse.add_argument("limit", type=int)
-    offset = parse.add_argument('offset', type=int)
-    order = parse.add_argument('order',type=str)
-
+    parse.add_argument('name', type=str, location='args')
+    parse.add_argument('description', type=str, location='args')
+    parse.add_argument('client', action='append', location='args')
+    parse.add_argument("limit", type=int, location='args')
+    parse.add_argument('offset', type=int, location='args')
+    parse.add_argument('order', type=str, location='args')
 
     def get(self, groupname=None):
         args = self.parse.parse_args()
@@ -32,21 +30,18 @@ class Group(Resource):
         group = table['group']
         host_to_group = table['host_group']
         if args['offset']:
-            print(args['offset'])
-            page = args['offset']/10+1
-            print(page)
+            page = args['offset'] / 10 +1
         else:
             page = 1
+
         if args['limit']:
             limit = args['limit']
         else:
-            limit=10
-
+            limit = 10
 
         group_all = group.query.all()
-        group_data = group.query.order_by(group.group_name.asc()).paginate(page,limit,error_out=True)
+        group_data = group.query.order_by(group.group_name.asc()).paginate(page, limit, error_out=True)
         groups = group_data.items
-
 
         for i in groups:
             info = OrderedDict()
@@ -58,13 +53,12 @@ class Group(Resource):
             info['groupname'] = group_name
             info['description'] = group_desc
             info['client_numbers'] = client_number
-            info['clients'] = []
+            # info['clients'] = []
             for l in host_to_group_data:
                 host_id = l.host_id
                 host_data = host.query.filter_by(host_id=host_id).first()
                 host_name = host_data.host_name
-                info['clients'].append(host_name)
-
+                # info['clients'].append(host_name)
 
             data.append(marshal(info, res_fields))
 
@@ -72,7 +66,7 @@ class Group(Resource):
         rows = data
         db.session.commit()
 
-        return current_app.make_res(200,200,"获取成功", total=total,rows=rows)
+        return jsonify({"total": total, "rows": rows})
 
     def post(self):
         args = self.parse.parse_args()

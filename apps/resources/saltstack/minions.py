@@ -1,5 +1,5 @@
 from flask import current_app
-from flask_restful import Resource, reqparse
+from flask_restful import Resource, reqparse, marshal, fields, marshal_with
 from apps.tasks import update_host_list_to_db, system_operator
 from json import loads
 from apps.models import Host
@@ -7,11 +7,22 @@ from apps.tasks import redis_save
 from json import dumps
 
 
+class Rows(fields.Raw):
+    def format(self,value):
+        return value
+
+res_fields = {
+    "total": fields.String(attribute="client_number"),
+    "rows": Rows(attribute="clients")
+}
+
+
 class Minions(Resource):
     parse = reqparse.RequestParser()
-    key = parse.add_argument('key', required=True, help="缺少key字段")
-    name = parse.add_argument('name', required=True, help="缺少key字段")
+    parse.add_argument('key', required=True, help="缺少key字段", location="args")
+    parse.add_argument('name', required=True, help="缺少key字段", location="args")
 
+    @marshal_with(res_fields)
     def get(self, minion=None):
         args = self.parse.parse_args()
         celery_metadata = current_app.redis.hget(args['name'], args['key'])
@@ -28,11 +39,11 @@ class Minions(Resource):
 
             for i in Host.query.all():
                 info['clients'].append({"hostname": i.host_name,
-                 "ip": i.host_ip,
-                 "location":i.host_location,
-                 "osinfo":i.host_os,
-                 "status":i.host_stats,
-                 "group":""})
+                                        "ip": i.host_ip,
+                                        "location": i.host_location,
+                                        "osinfo": i.host_os,
+                                        "status": i.host_stats,
+                                        "group": ""})
 
             data = {
                 "traceback": "null",
@@ -41,8 +52,8 @@ class Minions(Resource):
                 "task_id": celery_metadata.decode('utf-8'),
                 "result": info
             }
-            redis_save.delay(celery_key,dumps(data))
-            return info
+            redis_save.delay(celery_key, dumps(data))
+            return {"total": client_number, "rows": info}
 
     def post(self):
         operator = update_host_list_to_db.delay()
