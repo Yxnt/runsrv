@@ -1,0 +1,19 @@
+{% extends 'monitor/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+{% block box_title %}
+    主机健康状态
+{% endblock %}
+{% block box_body %}
+    <div class="table-responsive">
+        <table id="health"></table>
+    </div>
+{% endblock %}
+{% block js %}
+    <script type="application/javascript"
+            src="{{ url_for('static',filename='js/datatables/editor/bootstrap-table.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/monitor/health.js') }}"></script>
+
+{% endblock %}

@@ -1,9 +1,10 @@
 from flask_restful import Resource, reqparse, fields, marshal
 from apps.tasks import group_save
 from apps.tasks.db import host_to_group
-from apps import db
-from flask import current_app, jsonify
-from apps.models import table
+
+from flask import jsonify
+from apps.models import table,session
+from apps.common.auth.auth import require_auth
 
 from collections import OrderedDict
 
@@ -23,6 +24,7 @@ class Group(Resource):
     parse.add_argument('offset', type=int, location='args')
     parse.add_argument('order', type=str, location='args')
 
+    @require_auth
     def get(self, groupname=None):
         args = self.parse.parse_args()
         data = []
@@ -30,7 +32,7 @@ class Group(Resource):
         group = table['group']
         host_to_group = table['host_group']
         if args['offset']:
-            page = args['offset'] / 10 +1
+            page = args['offset'] / 10 + 1
         else:
             page = 1
 
@@ -39,8 +41,8 @@ class Group(Resource):
         else:
             limit = 10
 
-        group_all = group.query.all()
-        group_data = group.query.order_by(group.group_name.asc()).paginate(page, limit, error_out=True)
+        group_all = session.query(group).all()
+        group_data = session.query(group).query.order_by(group.group_name.asc()).paginate(page, limit, error_out=True)
         groups = group_data.items
 
         for i in groups:
@@ -53,18 +55,17 @@ class Group(Resource):
             info['groupname'] = group_name
             info['description'] = group_desc
             info['client_numbers'] = client_number
-            # info['clients'] = []
+
             for l in host_to_group_data:
                 host_id = l.host_id
                 host_data = host.query.filter_by(host_id=host_id).first()
                 host_name = host_data.host_name
-                # info['clients'].append(host_name)
 
             data.append(marshal(info, res_fields))
 
         total = len(group_all)
         rows = data
-        db.session.commit()
+        session.commit()
 
         return jsonify({"total": total, "rows": rows})
 

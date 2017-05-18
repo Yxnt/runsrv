@@ -1,0 +1,25 @@
+{% extends 'monitor/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block box_body %}
+    <div class="table-responsive">
+        <table></table>
+    </div>
+
+{% endblock %}
+
+{% block box_title %}
+    告警信息列表
+{% endblock %}
+
+{% block js %}
+    <script type="application/javascript"
+            src="{{ url_for('static',filename='js/datatables/editor/bootstrap-table.js') }}"></script>
+    <script type="application/javascript"
+            src="{{ url_for('static',filename='js/datatables/locale/bootstrap-table-zh-cn.js') }}"></script>
+        <script type="application/javascript"
+            src="{{ url_for('static',filename='js/monitor/report.js') }}"></script>
+{% endblock %}

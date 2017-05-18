@@ -1,5 +1,5 @@
-from apps import celery, db
-from apps.models import table
+from apps import celery
+from apps.models import table,session
 
 
 @celery.task
@@ -7,8 +7,8 @@ def group_save(groupname, desc, counter):
     """保存组信息"""
     group = table['group']
     data = group(group_name=groupname, group_host_counter=counter, group_descript=desc)
-    db.session.add(data)
-    db.session.commit()
+    session.add(data)
+    session.commit()
 
 
 @celery.task
@@ -19,11 +19,11 @@ def host_to_group(clients, groupname):
     group = table['group']
 
     for client in clients:
-        host = host.query.filter_by(host_name=client).first()
-        group = group.query.filter_by(group_name=groupname).first()
+        host = session.query(host).filter_by(host_name=client).first()
+        group = session.query(group).filter_by(group_name=groupname).first()
         if host:
             relationship = hosttogroup(host_id=host.host_id,group_id=group.group_id)
-            db.session.add(relationship)
+            session.add(relationship)
 
-    db.session.commit()
+    session.commit()
 

@@ -4,7 +4,7 @@
 $(function () {
    $("#update_host").click(function () {
        $.ajax({
-           url:'/api/salt/minions',
+           url:'/api/salt/minions/',
            type:'post',
            success: function () {
                alert("1")

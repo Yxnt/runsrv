@@ -43,7 +43,7 @@ desired effect
 |               | sidebar-mini                            |
 |---------------------------------------------------------|
 -->
-<body class="hold-transition skin-blue sidebar-mini sidebar-collapse">
+<body class="hold-transition skin-blue sidebar-mini ">
 <div class="wrapper">
 
     <!-- Main Header -->
@@ -125,15 +125,16 @@ desired effect
                 <li><a href="#"><i class="fa fa-link"></i> <span>系统初始化</span></a></li>
 
                 <li class="treeview">
-                    <a href="#"><i class="fa fa-link"></i> <span>监控信息</span>
+                    <a href="#"><i class="fa fa-laptop"></i> <span>监控信息</span>
                     <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span></a>
                     <ul class="treeview-menu">
-                        <li><a href="{{ url_for('monitor.graph') }}"><i class="fa fa-circle-o"></i>监控图示</a></li>
+                        <li><a href="{{ url_for('monitor.graph') }}"><i class="fa fa-circle-o text-aqua"></i>监控图示</a></li>
+                        <li><a href="{{ url_for('monitor.health') }}"><i class="fa fa-circle-o"></i>健康状态</a></li>
                         <li><a href=""><i class="fa fa-circle-o"></i>监控汇总</a></li>
                         <li><a href=""><i class="fa fa-circle-o"></i>监控模板</a></li>
-                        <li><a href=""><i class="fa fa-circle-o"></i>告警管理</a></li>
+                        <li><a href="{{ url_for('monitor.report_manager') }}"><i class="fa fa-circle-o"></i>告警管理</a></li>
                     </ul>
                 </li>
                 <li><a href="#"><i class="fa fa-link"></i> <span>应用管理</span></a></li>

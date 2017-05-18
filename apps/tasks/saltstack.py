@@ -1,8 +1,8 @@
 from apps import celery
 from flask import current_app
-from apps.models import Host
-from apps import db
+from apps.models import Host,session
 from collections import OrderedDict
+from ipaddress import IPv4Address as ipv4
 
 
 @celery.task
@@ -14,16 +14,16 @@ def update_host_list_to_db():
     ret['clients'] = []
     for k, v in current_app.salt.minions()['return'][0].items():
         data = {}
-        hostname = k
+        hostname = v['fqdn']
         if 'oscodename' in v:
             os = v['oscodename']
         else:
             os = v['osfullname']
-        network_dev = v['ip_interfaces']
-        for k, v in network_dev.items():
-            if "127.0.0.1" in v or "::1" in v:
-                continue
-            hostip = v[0]
+        ip_all = v['ipv4']
+        for i in ip_all:
+            if ipv4(i).is_private:
+                hostip = i
+                break
 
         status = "UP"
         data['hostname'] = hostname
@@ -32,14 +32,13 @@ def update_host_list_to_db():
         data['osinfo'] = os
         data['group'] = ""
         data['status'] = "UP"
-        client_number +=1
-        query = host.query.filter_by(host_ip=hostip).first()
+        client_number += 1
+        query = session.query(host).filter_by(host_ip=hostip).first()
         if not query:
             hostinfo = host(hostname=hostname, ip=hostip, os=os, stats=status)
-            db.session.add(hostinfo)
+            session.add(hostinfo)
         ret['client_number'] = client_number
         ret['clients'].append(data)
-    db.session.commit()
+        session.commit()
 
     return ret
-

@@ -17,26 +17,9 @@
     <div id="toolbar">
         <div class="row">
             <div class="col-md-3">
-                <select id="endpoint" class="selectpicker" multiple></select></div>
+                <select id="endpoint" class="selectpicker"></select></div>
             <div class="col-md-3">
-                <select id="counter" class="selectpicker" multiple>
-                    <option>1</option>
-                    <option>1</option>
-                    <option>1</option>
-                    <option>1</option>
-                    <option>1</option>
-                    <option>1</option>
-                    <option>1</option>
-                    <option>1</option>
-                    <option>1</option>
-                    <option>1</option>
-                    <option>1</option>
-                    <option>1</option>
-                    <option>1</option>
-                    <option>1</option>
-                    <option>1</option>
-                    <option>1</option>
-                    <option>1</option>
+                <select id="counter" class="selectpicker">
                 </select></div>
             <div class="col-md-4">
                 <div class="input-group">
@@ -47,12 +30,14 @@
                 </div>
             </div>
             <div class="col-md-1 pull-right">
-                <button class="btn btn-info">查询</button>
+                <button class="btn btn-info" id="submit">查询</button>
             </div>
         </div>
-        <div class="col-md-12 col-xs-12">
-            <canvas id='graph' height="370"></canvas>
-        </div>
+
+
+        <canvas id='graph'></canvas>
+
+
     </div>
 
 

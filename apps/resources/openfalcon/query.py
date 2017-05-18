@@ -1,7 +1,7 @@
 from flask_restful import Resource, reqparse
-from flask import current_app, request
+from flask import current_app
 from requests import post as _post
-from json import dumps, loads, load, dump
+from json import dumps, loads
 
 
 class Query(Resource):
@@ -10,7 +10,7 @@ class Query(Resource):
     parser.add_argument("end", type=int, location=["form", "json"])
     parser.add_argument("cf", type=str, location=["form", "json"])
     parser.add_argument("endpoint_counters", type=str, location=["form", "json"])
-    parser.add_argument("data", type=str, location=["form", "json"])
+    parser.add_argument("data",type=str,location=["form", "json"])
     parser.add_argument("endpoint", type=str, location=["form", "json"])
     parser.add_argument("counter", type=str, location=["form", "json"])
 
@@ -24,12 +24,15 @@ class Query(Resource):
         query_service = "http://{}:{}/graph/{}".format(query_addr, query_port, uri)
 
         if uri == 'info' or uri == 'last':
-            data = loads(data['data'])
+            data = data['data']
         else:
             data.pop("endpoint")
             data.pop("counter")
+            data.pop("data")
             data['endpoint_counters'] = loads(data['endpoint_counters'])
-        response = _post(query_service, json=data, headers={"Content-Type": "application/json"})
+            data = dumps(data)
+
+        response = _post(query_service, data=data, headers={"Content-Type": "application/json"})
 
         if response.status_code != 404:
             return response.json()

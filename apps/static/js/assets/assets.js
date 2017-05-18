@@ -279,7 +279,7 @@ var toolbar = function () {
                         select.empty();
                         var data = {name: 'celery:task:system', key: 'update_host_list'};
                         ajax('/api/salt/minions/', 'get', data, function (data) {
-                            var clients = data['clients'];
+                            var clients = data['rows'];
                             for (var i in clients) {
                                 client = clients[i]['hostname'];
                                 select.append($("<option></option>").attr("value", client).text(client))
@@ -339,8 +339,6 @@ function timestamptohour(time, islist) {
         seconds = ("0" + date.getSeconds()).slice(-2);
         return date.getHours() + ":" + date.getMinutes() + ":" + seconds;
     }
-
-
 }
 
 function monitor() {
@@ -363,7 +361,6 @@ function monitor() {
                 counter: "mem.memfree.percent"
             }
         ])
-
     };
 
     var cpu_info = $("#CPU");
@@ -481,15 +478,24 @@ function monitor() {
         ajax(last_operator, 'post', refresh, function (data) {
             cpu.data.labels.shift();
             cpu.data.datasets[0].data.shift();
+            mem.data.labels.shift();
+            mem.data.datasets[0].data.shift();
             for (var i in data) {
                 if (data[i]["counter"].match("cpu")) {
                     time = timestamptohour(data[i]["value"]["timestamp"]);
                     value = data[i]["value"]['value'];
                     cpu.data.labels.push(time);
                     cpu.data.datasets[0].data.push(value);
+                } else if (data[i]["counter"].match("mem")) {
+                    time = timestamptohour(data[i]["value"]["timestamp"]);
+                    value = data[i]["value"]['value'];
+                    mem.data.labels.push(time);
+                    mem.data.datasets[0].data.push(value);
                 }
+
             }
             cpu.update();
+            mem.update();
         })
     }, 60000);
 }

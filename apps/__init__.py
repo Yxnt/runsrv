@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_restful import Api, HTTPException
 from flask_assets import Environment
@@ -8,14 +7,13 @@ from apps.common import config
 from apps.common.assest.assest import bundles
 from apps.common.assest import assest
 
-from json import dumps
 from celery import Celery
 import os
 
 celery = Celery(__name__, broker=config[os.environ.get('FLASK_CONFIG') or 'dev'].CELERY_BROKER_URL,
                 backend=config[os.environ.get('FLASK_CONFIG') or 'dev'].CELERY_RESULT_BACKEND)
 
-db = SQLAlchemy()
+
 login = LoginManager()
 api = Api()
 assets = Environment()
@@ -28,7 +26,7 @@ class RessourceDoesNotExist(HTTPException):
         return "Page_Not_Found"
 
 
-def make_res(status_code, message_code, message, total=None,rows=None,**kwargs):
+def make_res(status_code, message_code, message, total=None, rows=None, **kwargs):
     """restful 接口返回信息"""
     mes = OrderedDict()
     mes['status'] = message_code
@@ -44,13 +42,12 @@ def create_apps(config_name):
     apps = Flask(__name__)
     apps.config.from_object(config[config_name])
 
-    db.init_app(apps)
 
     assets.init_app(apps)
-    assets.register(bundles) # 初始化资源压缩
+    assets.register(bundles)  # 初始化资源压缩
 
     login.init_app(apps)
-    login.login_view = 'userview.login' # 未登陆用户跳转
+    login.login_view = 'userview.login'  # 未登陆用户跳转
     login.login_message = u"Before operation, please login"
     login.login_message_category = "info"
     login.session_protection = "strong"
@@ -75,10 +72,11 @@ def create_apps(config_name):
     def init():
         apps.salt.login()
 
+
     with apps.app_context():
         from apps.models import User
         from apps.resources import userapi, Login, Info, Logout, saltapi, Minions, Group, assetsapi
-        from apps.resources import falcon,Query
+        from apps.resources import falcon, Query, monitorapi, Query_item, Report
 
         api.init_app(userapi)
         # RestFul
@@ -86,18 +84,18 @@ def create_apps(config_name):
         api.add_resource(Logout, '/user/logout')
         api.add_resource(Info, '/user/info/', '/user/info/<username>')
         api.add_resource(Minions, '/salt/minions/', '/salt/minions/<minion>')
-        api.add_resource(Group,'/assets/group/','/assets/group/<groupname>')
-        api.add_resource(Query,'/falcon/query/graph/<querypath>')
+        api.add_resource(Group, '/assets/group/', '/assets/group/<groupname>')
+        api.add_resource(Query, '/falcon/query/graph/<querypath>')
+        api.add_resource(Query_item, '/falcon/endpoint_item/item/')
+        api.add_resource(Report, '/monitor/report')
 
         # Blueprint
         apps.register_blueprint(userapi, url_prefix='/api')
         apps.register_blueprint(saltapi, url_prefix='/api')
         apps.register_blueprint(assetsapi, url_prefix='/api')
         apps.register_blueprint(falcon, url_prefix='/api')
+        apps.register_blueprint(monitorapi, url_prefix='/api')
 
-        db.Model.metadata.reflect(bind=db.engine, schema='runsrv')
-
-        apps.User = User
         apps.make_res = make_res
 
         from apps.common.salt.salt import SaltApi
