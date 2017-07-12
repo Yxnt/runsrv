@@ -27,11 +27,12 @@ class DevelopMent(Config):
         DBPORT=DBPORT,
         DBNAME=DBNAME
     ))
+
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_POOL_SIZE = 30
-    SQLALCHEMY_POOL_TIMEOUT = 120
+    SQLALCHEMY_POOL_SIZE = 10
 
     REMEMBER_COOKIE_DURATION = timedelta(hours=2)
+    PROPAGATE_EXCEPTIONS = False
 
     # saltstack settings
     LOGIN_TOKEN_NAME = 'salt:login'
@@ -41,6 +42,7 @@ class DevelopMent(Config):
     SALT_EAUTH = 'pam'
     SALT_PORT = 8000
     SALT_SSL_ON = False
+    MINIONS_FILE_ROOT = '/var/cache/salt/master/minions'
 
     # redis settings
     REDIS_HOST = '10.19.80.12'
@@ -76,3 +78,9 @@ class DevelopMent(Config):
 
     # monitor_addr
     MONITOR_ADDR = '127.0.0.1:5002'
+
+    # gitlab
+    GITLAB_ADDR = 'https://git.higsq.com:8889'
+    GITLAB_TOKEN_HEADER = {"PRIVATE-TOKEN":"CrzuPZsvM_1xG88Bui-q"}
+    GITLAB_USER = 'root'
+    GITLAB_PASSWORD = 'w.ceUwOoWVKP2'

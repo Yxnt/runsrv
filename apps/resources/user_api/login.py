@@ -20,23 +20,22 @@ class Login(Resource):
         password = args['password']
         remeber = args['remeber']
 
-
+        # username = User.query.filter_by(username=username).first()
         username = session.query(User).filter_by(username=username).first()
         if username:
             password = username.verify_password(password)
             if password:
                 login_user(username, remeber)
-                session.commit()
+
         else:
-            session.commit()
             return current_app.make_res(500, 203, "登录失败，原因：账号或密码错误")
 
         url_query_column = parse.urlsplit(parse.unquote(request.referrer)).query
         if url_query_column:
             next_page = url_query_column.split('=')[1]
-            session.commit()
+
             return current_app.make_res(200, 200, "登陆成功", next=next_page)
 
         else:
-            session.commit()
+
             return current_app.make_res(200, 200, "登陆成功", next='/')

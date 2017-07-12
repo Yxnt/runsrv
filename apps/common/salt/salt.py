@@ -64,6 +64,7 @@ class SaltApi(object):
         if content.status_code == 200:
             return content.json()
 
+
     def login(self):
         """登陆接口"""
 
@@ -87,14 +88,16 @@ class SaltApi(object):
     def keys(self):
         pass
 
-    def jid(self):
-        pass
+    def jid(self,jid):
+        return self.req('/jobs/%s' % jid)
 
     def stats(self):
         pass
 
-    def run(self):
-        pass
+    def run(self,data):
+        rep = self.reqp(data)
+        print(rep)
+        return rep
 
 
 if __name__ == '__main__':

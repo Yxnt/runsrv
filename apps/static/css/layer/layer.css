@@ -95,9 +95,9 @@ html #layuicss-skinlayercss{display: none; position: absolute; width: 1989px;}
 .layui-layer-iframe iframe{display: block; width: 100%;}
 
 .layui-layer-loading{border-radius:100%; background:none;  box-shadow:none;  border:none;}
-.layui-layer-loading .layui-layer-content{width:60px; height:24px; background:url(loading-0.gif) no-repeat;}
-.layui-layer-loading .layui-layer-loading1{width:37px; height:37px; background:url(loading-1.gif) no-repeat;}
-.layui-layer-loading .layui-layer-loading2, .layui-layer-ico16{width:32px; height:32px; background:url(loading-2.gif) no-repeat;}
+.layui-layer-loading .layui-layer-content{width:60px; height:24px; background:url(../../img/layer/loading-0.gif) no-repeat;}
+.layui-layer-loading .layui-layer-loading1{width:37px; height:37px; background:url(../../img/layer/loading-1.gif) no-repeat;}
+.layui-layer-loading .layui-layer-loading2, .layui-layer-ico16{width:32px; height:32px; background:url(../../img/layer/loading-2.gif) no-repeat;}
 .layui-layer-tips{background: none; box-shadow:none; border:none;}
 .layui-layer-tips .layui-layer-content{position: relative; line-height: 22px; min-width: 12px; padding: 5px 10px; font-size: 12px; _float:left; border-radius: 2px; box-shadow: 1px 1px 3px rgba(0,0,0,.2); background-color: #000; color: #fff;}
 .layui-layer-tips .layui-layer-close{right:-2px; top:-1px;}

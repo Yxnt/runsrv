@@ -19,10 +19,12 @@ def host_to_group(clients, groupname):
     group = table['group']
 
     for client in clients:
-        host = session.query(host).filter_by(host_name=client).first()
-        group = session.query(group).filter_by(group_name=groupname).first()
-        if host:
-            relationship = hosttogroup(host_id=host.host_id,group_id=group.group_id)
+        host_id = session.query(host.host_id).filter_by(host_name=client).first()
+
+        group_id = session.query(group.group_id).filter_by(group_name=groupname).first()
+
+        if host_id and group_id:
+            relationship = hosttogroup(host_id=host_id.host_id,group_id=group_id.group_id)
             session.add(relationship)
 
     session.commit()

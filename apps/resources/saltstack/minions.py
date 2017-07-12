@@ -1,8 +1,9 @@
 from flask import current_app
 from flask_restful import Resource, reqparse, fields, marshal_with
-from apps.tasks import update_host_list_to_db, system_operator
+from apps.tasks import get_minion_info, system_operator
 from apps.models import Host, session
 from apps.tasks import redis_save
+from apps.common.apiauth.auth import user_auth
 from json import dumps, loads
 
 
@@ -21,7 +22,7 @@ class Minions(Resource):
     parse = reqparse.RequestParser()
     parse.add_argument('key', help="缺少key字段", location="args")
     parse.add_argument('name', help="缺少key字段", location="args")
-
+    decorators = [user_auth]
     @marshal_with(res_fields)
     def get(self, minion=None):
         args = self.parse.parse_args()
@@ -57,6 +58,6 @@ class Minions(Resource):
             return {"total": client_number, "rows": info}
 
     def post(self):
-        operator = update_host_list_to_db.delay()
+        operator = get_minion_info.delay()
         system_operator.delay("update_host_list", operator.id)
         return current_app.make_res(200, 200, "执行成功", uuid=operator.id)

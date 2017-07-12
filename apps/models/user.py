@@ -1,6 +1,6 @@
 from datetime import datetime
 from apps import login
-from apps.models import Base
+from apps.models import Base, session
 from sqlalchemy import Column, INTEGER, DATETIME, NVARCHAR
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
@@ -8,6 +8,8 @@ from apps.models import session
 
 
 class User(UserMixin, Base):
+    # class User(UserMixin, Base):
+
     """
     用户表，存放了所有的用户
     """
@@ -47,4 +49,5 @@ class User(UserMixin, Base):
 def load_user(user_id):
     id = session.query(User).get(user_id)
     session.commit()
+
     return id

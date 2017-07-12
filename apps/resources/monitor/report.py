@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
-
 from apps.models import Monitor, session
+from apps.common.apiauth.auth import user_auth
 
 
 class Report(Resource):
@@ -9,6 +9,7 @@ class Report(Resource):
     parser.add_argument('offset', type=int, location='args')
     parser.add_argument('order', type=str, location='args')
 
+    decorators = [user_auth]
     def get(self):
         args = self.parser.parse_args()
 
@@ -24,11 +25,11 @@ class Report(Resource):
 
         ret = {}
 
-        ret['total'] = len(Monitor.query.all())
+        ret['total'] = len(session.query(Monitor).all())
         ret['rows'] = []
 
-        data = session.query(Monitor).order_by(Monitor.id.asc()).paginate(page, limit, error_out=True)
-        for i in data.items:
+        data = session.query(Monitor).order_by(Monitor.id.asc()).offset(page).limit(limit).all()
+        for i in data:
             ret['rows'].append({
                 "hostname": i.hostname,
                 "message":i.message,

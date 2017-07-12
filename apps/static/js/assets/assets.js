@@ -19,6 +19,25 @@ $(function () {
         var tool = new toolbar();
         tool.Init();
 
+        $("#trash").click(function () {
+            var $table = $("#groupTable");
+            var rows = $.map($table.bootstrapTable('getSelections'), function (row) {
+                return row.id;
+            });
+            var data = {
+                delete: 1,
+                groups: rows
+            };
+            ajax('/api/assets/group/', 'post', data, function () {
+                $table.bootstrapTable('remove', {
+                    field: 'id',
+                    values: rows
+                });
+                $table.bootstrapTable("refresh")
+            });
+
+
+        })
     }
 });
 
@@ -190,7 +209,7 @@ var groupTable = function () {
             columns: [{ // thead
                 checkbox: true
                 // field: "check"
-            }, {
+            }, {field: "id", title: "组ID"}, {
                 field: "groupname",
                 title: "组名"
             }, {
@@ -432,7 +451,6 @@ function monitor() {
             pointHitRadius: 10
         }];
         cpu.data.labels = timestamptohour(cpu_labels, islist = 1);
-
 
 
         mem.data.labels = timestamptohour(mem_labels, islist = 1);

@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from . import Base
+
 from sqlalchemy import Column,INTEGER,NVARCHAR,BOOLEAN,DATETIME
 
 

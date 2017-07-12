@@ -2,7 +2,7 @@ from flask_restful import Resource, reqparse
 from flask import current_app
 from requests import post as _post
 from json import dumps, loads
-
+from apps.common.apiauth.auth import user_auth
 
 class Query(Resource):
     parser = reqparse.RequestParser()
@@ -13,7 +13,7 @@ class Query(Resource):
     parser.add_argument("data",type=str,location=["form", "json"])
     parser.add_argument("endpoint", type=str, location=["form", "json"])
     parser.add_argument("counter", type=str, location=["form", "json"])
-
+    decorators = [user_auth]
     def post(self, querypath):
         args = self.parser.parse_args()
         return self.falcon_query(querypath, args)

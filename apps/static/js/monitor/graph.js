@@ -34,7 +34,7 @@ function toolbar() {
 
     var $counter = $("#counter");
     $counter.selectpicker({
-        liveSearch:true,
+        liveSearch: true,
         title: "选择监控项"
     });
     $counter.on("show.bs.select", function () {
@@ -94,23 +94,51 @@ function toolbar() {
             endpoint_counters: JSON.stringify(counters)
         };
 
-
+        var gr_data = [];
+        var label = [];
+        var labels = [];
         ajax('/api/falcon/query/graph/history', 'post', query_data, function (data) {
-            var label = [];
-            var labels = [];
-            var gr_data = [];
+
+
             for (var i in data) {
                 label.push(data[i]["counter"]);
                 for (var l in data[i]["Values"]) {
                     labels.push(data[i]["Values"][l]["timestamp"])
                     if (data[i]["Values"][l]['value'] !== null) {
                         gr_data.push(data[i]["Values"][l]['value']);
+                    } else {
+                        gr_data.push("NaN");
                     }
                 }
             }
 
             gr.set(timestamptohour(labels, islist = 1), label, gr_data)
-        })
+        });
+
+        setInterval(function () {
+            var now = gettime();
+            var priv = gettime(1);
+            query_data['start'] = priv;
+            query_data['end'] = now;
+            ajax('/api/falcon/query/graph/history', 'post', query_data, function (data) {
+
+                for (var i in data) {
+
+                    for (var l in data[i]["Values"]) {
+                        labels.push(data[i]["Values"][l]["timestamp"])
+                        if (data[i]["Values"][l]['value'] !== null) {
+                            gr_data.push(data[i]["Values"][l]['value']);
+                        } else {
+                            gr_data.push("NaN");
+                        }
+                    }
+                }
+                gr_data.shift();
+                labels.shift();
+                gr.set(timestamptohour(labels, islist = 1), label, gr_data)
+            });
+
+        }, 30000)
     });
 
 
@@ -118,38 +146,63 @@ function toolbar() {
 
 
 function graph() {
-    var $graph = $("#graph");
-    var char = new Chart($graph, {
-        type: 'line'
-    });
+    var $graph = document.getElementById('graph');
+    var mychart = echarts.init($graph);
 
-    char.set = function (labels, label, data) {
-        char.data.labels = labels;
-        char.data.datasets = [{
-            type: 'line',
-            label: label,
-            data: data,
-            fill: false,
-            lineTension: 0.1,
-            backgroundColor: "rgba(75,192,192,0.4)",
-            borderColor: "rgba(255,99,132,1)",
-            borderCapStyle: 'butt',
-            borderDash: [],
-            borderDashOffset: 0.0,
-            borderJoinStyle: 'miter',
-            pointBorderColor: "rgba(75,192,192,1)",
-            pointBackgroundColor: "#fff",
-            pointBorderWidth: 1,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: "rgba(75,192,192,1)",
-            pointHoverBorderColor: "rgba(220,220,220,1)",
-            pointHoverBorderWidth: 2,
-            pointRadius: 1,
-            pointHitRadius: 10
-        }];
-        char.update();
+
+    mychart.set = function (labels, label, data) {
+        var option = {
+            dataZoom: [
+                {
+                    id: 'dataZoomX',
+                    type: 'slider',
+                    xAxisIndex: [0],
+                    filterMode: 'filter'
+                }],
+            tooltip: {
+                trigger: 'none',
+                axisPointer: {
+                    type: 'cross'
+                }
+            },
+            legend: {
+                data: label
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    axisLine: {
+                        onZero: false
+                    },
+
+                    axisPointer: {
+                        label: {
+                            formatter: function (params) {
+                                return label + params.value
+                                    + (params.seriesData.length ? '：' + params.seriesData[0].data : '');
+                            }
+                        }
+                    },
+                    data: labels
+                }
+            ],
+            yAxis: {},
+            series: [{
+                name: label,
+                type: 'line',
+                data: data
+            }]
+
+        };
+
+        mychart.setOption(option);
     };
-    return char;
+    return mychart;
+
+
 }
 
 

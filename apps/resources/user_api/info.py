@@ -2,6 +2,7 @@ from flask_restful import Resource, reqparse
 from flask import current_app
 from collections import OrderedDict
 from json import dumps
+from apps.common.apiauth.auth import user_auth
 from apps.models import User,session
 
 parse = reqparse.RequestParser()
@@ -12,6 +13,7 @@ class Info(Resource):
     user = []
     user_list = []
 
+    decorators = [user_auth]
     def get(self, username=None):
         """获取用户接口
         :param username: 要查询的用户名

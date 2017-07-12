@@ -13,11 +13,10 @@ runsrv_host_groups = Table(
 class Host(Base):
     __tablename__ = 'runsrv_host'
     host_id = Column(INTEGER, primary_key=True, autoincrement=True)
+    host_minion_id = Column(NVARCHAR(100), unique=True, nullable=False)
     host_name = Column(NVARCHAR(100), unique=True, nullable=False)
     host_ip = Column(NVARCHAR(15), unique=True, nullable=False)
-    host_location = Column(NVARCHAR(50), default="香港")
     host_os = Column(NVARCHAR(50), nullable=False)
-    host_stats = Column(NVARCHAR(4), nullable=False)
     host_groups = relationship('Group', secondary=runsrv_host_groups, backref=backref('runsrv_host'), lazy='dynamic')
 
     def __init__(self, hostname, ip, os, stats, location=None):
@@ -26,3 +25,4 @@ class Host(Base):
         self.host_location = location
         self.host_os = os
         self.host_stats = stats
+

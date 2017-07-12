@@ -119,24 +119,69 @@ desired effect
                     <ul class="treeview-menu">
                         <li><a href="{{ url_for('assetsview.Host') }}"><i
                                 class="fa fa-circle-o text-aqua"></i>主机管理</a></li>
-                        <li><a href="{{ url_for("assetsview.Group") }}"><i class="fa fa-circle-o text-aqua"></i>分组管理</a></li>
+                        <li><a href="{{ url_for("assetsview.Group") }}"><i class="fa fa-circle-o text-aqua"></i>分组管理</a>
+                        </li>
                     </ul>
                 </li>
-                <li><a href="#"><i class="fa fa-link"></i> <span>系统初始化</span></a></li>
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-stack-overflow"></i> <span>项目管理</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{{ url_for("publish.repoinfo") }}"><i class="fa fa-circle-o text-aqua"></i>项目信息</a>
+                        <li><a href="{{ url_for('publish.index') }}"><i
+                                class="fa fa-circle-o text-aqua"></i>新项目发布</a></li>
+                        <li><a href="{{ url_for('publish.repo_update') }}"><i
+                                class="fa fa-circle-o text-aqua"></i>项目更新</a></li>
+                        </li>
+                    </ul>
+                </li>
 
                 <li class="treeview">
-                    <a href="#"><i class="fa fa-laptop"></i> <span>监控信息</span>
-                    <span class="pull-right-container">
+                    <a href="#"><i class="fa fa-stack-overflow"></i> <span>文件管理</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="{{ url_for("filemanager.upload") }}"><i class="fa fa-circle-o text-aqua"></i>文件上传</a>
+                        <li><a href="{{ url_for('filemanager.download') }}"><i
+                                class="fa fa-circle-o text-aqua"></i>文件下载</a></li>
+                    </ul>
+                </li>
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-area-chart"></i> <span>监控信息</span>
+                        <span class="pull-right-container">
                             <i class="fa fa-angle-left pull-right"></i>
                         </span></a>
                     <ul class="treeview-menu">
-                        <li><a href="{{ url_for('monitor.graph') }}"><i class="fa fa-circle-o text-aqua"></i>监控图示</a></li>
+                        <li><a href="{{ url_for('monitor.graph') }}"><i class="fa fa-circle-o text-aqua"></i>监控图示</a>
+                        </li>
                         <li><a href="{{ url_for('monitor.health') }}"><i class="fa fa-circle-o"></i>健康状态</a></li>
                         <li><a href=""><i class="fa fa-circle-o"></i>监控汇总</a></li>
                         <li><a href=""><i class="fa fa-circle-o"></i>监控模板</a></li>
-                        <li><a href="{{ url_for('monitor.report_manager') }}"><i class="fa fa-circle-o"></i>告警管理</a></li>
+                        <li><a href="{{ url_for('monitor.report_manager') }}"><i class="fa fa-circle-o"></i>告警管理</a>
+                        </li>
                     </ul>
                 </li>
+
+
+                <li class="treeview">
+                    <a href="#"><i class="fa fa-terminal"></i> <span>Salt操作</span>
+                        <span class="pull-right-container">
+                            <i class="fa fa-angle-left pull-right"></i>
+                        </span></a>
+                    <ul class="treeview-menu">
+                        <li><a href="{{ url_for('cmd.index') }}"><i class="fa fa-circle-o text-aqua"></i>
+                            <span>命令执行</span></a></li>
+
+
+                    </ul>
+                </li>
+
+
                 <li><a href="#"><i class="fa fa-link"></i> <span>应用管理</span></a></li>
                 <li><a href="#"><i class="fa fa-link"></i> <span>用户管理</span></a></li>
                 <li><a href="{{ url_for('system.index') }}"><i class="fa fa-link"></i> <span>系统管理</span></a></li>
