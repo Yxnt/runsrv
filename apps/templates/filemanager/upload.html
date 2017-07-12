@@ -1,0 +1,61 @@
+{% extends 'filemanager/base.html' %}
+
+{% block css %}
+    {{ super() }}
+    <link href="{{ url_for('static',filename='css/fileinput/fileinput.min.css') }}" media="all" rel="stylesheet"
+          type="text/css"/>
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrapselect/bootstrap-select.min.css') }}">
+{% endblock %}
+
+{% block box_body %}
+
+
+
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">文件上传</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+
+                <div class="form-group">
+                    <label for="group">选择组</label>
+                    <input type="checkbox" id="group_check">
+                    <div>
+                        <select id="group" class="selectpicker form-control" title="选择组" disabled=""></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>选择主机</label>
+                    <input type="checkbox" id="host_check">
+                    <div>
+                        <select id="host" class="selectpicker form-control" title="选择主机" disabled=""></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="upload">添加文件</label>
+                    <input type="file" id="upload" class="file-loading" name="file">
+                </div>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+
+
+
+
+
+
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript"
+            src="{{ url_for('static',filename='js/bootstrapselect/bootstrap-select.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/fileinput/fileinput.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/filemanager/upload.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/tool/tool.js') }}"></script>
+{% endblock %}

@@ -4,6 +4,9 @@ from flask_login import login_user
 from flask import current_app, request
 from urllib import parse
 
+from apps.models import User,session
+
+
 
 class Login(Resource):
     parse = reqparse.RequestParser()
@@ -17,19 +20,22 @@ class Login(Resource):
         password = args['password']
         remeber = args['remeber']
 
-        user = current_app.User
-        username = user.query.filter_by(username=username).first()
+        # username = User.query.filter_by(username=username).first()
+        username = session.query(User).filter_by(username=username).first()
         if username:
             password = username.verify_password(password)
             if password:
                 login_user(username, remeber)
+
         else:
             return current_app.make_res(500, 203, "登录失败，原因：账号或密码错误")
 
         url_query_column = parse.urlsplit(parse.unquote(request.referrer)).query
         if url_query_column:
             next_page = url_query_column.split('=')[1]
+
             return current_app.make_res(200, 200, "登陆成功", next=next_page)
 
         else:
+
             return current_app.make_res(200, 200, "登陆成功", next='/')

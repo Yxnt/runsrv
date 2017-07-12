@@ -14,12 +14,14 @@ Flask-Script==2.0.5
 Flask-SQLAlchemy==2.2
 Flask-WTF==0.14.2
 flower==0.9.1
+ipaddress==1.0.18
 itsdangerous==0.24
 Jinja2==2.9.5
 jsmin==2.2.1
 kombu==4.0.2
 MarkupSafe==1.0
 packaging==16.8
+psutil==5.2.2
 PyMySQL3==0.5
 pyparsing==2.2.0
 python-dateutil==2.6.0

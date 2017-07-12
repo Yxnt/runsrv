@@ -1,20 +1,25 @@
 from datetime import datetime
-from apps import db, login
+from apps import login
+from apps.models import Base, session
+from sqlalchemy import Column, INTEGER, DATETIME, NVARCHAR
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from apps.models import session
 
 
-class User(UserMixin, db.Model):
+class User(UserMixin, Base):
+    # class User(UserMixin, Base):
+
     """
     用户表，存放了所有的用户
     """
     __tablename__ = 'runsrv_user'
-    user_id = db.Column(db.INTEGER, primary_key=True, autoincrement=True)
-    username = db.Column(db.NVARCHAR(80), unique=True, nullable=False)
-    password = db.Column(db.NVARCHAR(93), unique=True, nullable=True)
-    email = db.Column(db.NVARCHAR(50), unique=True, nullable=True)
-    regtime = db.Column(db.DATETIME, nullable=False)
-    status = db.Column(db.NVARCHAR(10), nullable=False)
+    user_id = Column(INTEGER, primary_key=True, autoincrement=True)
+    username = Column(NVARCHAR(80), unique=True, nullable=False)
+    password = Column(NVARCHAR(93), unique=True, nullable=True)
+    email = Column(NVARCHAR(50), unique=True, nullable=True)
+    regtime = Column(DATETIME, nullable=False)
+    status = Column(NVARCHAR(10), nullable=False)
 
     def __init__(self, username, password=None, email=None, status=None):
         self.username = username
@@ -42,4 +47,7 @@ class User(UserMixin, db.Model):
 
 @login.user_loader
 def load_user(user_id):
-    return User.query.get(user_id)
+    id = session.query(User).get(user_id)
+    session.commit()
+
+    return id

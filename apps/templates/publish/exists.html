@@ -1,0 +1,78 @@
+{% extends 'publish/base.html' %}
+{% block css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrapselect/bootstrap-select.min.css') }}">
+
+{% endblock %}
+
+{% block box_body %}
+    <div class="col-md-6">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">已有项目更新</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+
+                <!-- text input -->
+                <div class="form-group">
+                    <label for="project">项目名称</label>
+                    <div>
+                        <select id="project" class="selectpicker form-control" title="选择项目"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="method">发布方式</label>
+                    <div>
+                        <select id="method" class="selectpicker form-control" title="发布方式"></select>
+                    </div>
+                </div>
+                <div id="tag" class="form-group" hidden>
+                    <label for="tag_s">选择Tag</label>
+                    <div>
+                        <select id="tag_s" class="selectpicker form-control" title="选择Tag"></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="group">选择组</label>
+                    <input type="checkbox" id="group_check">
+                    <div>
+                        <select id="group" class="selectpicker form-control" title="选择组" disabled=""></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>选择主机</label>
+                    <input type="checkbox" id="host_check">
+                    <div>
+                        <select id="host" class="selectpicker form-control" title="选择主机" disabled=""></select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button id="submit" class="pull-right btn btn-primary">发布</button>
+                </div>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="box box-warning">
+            <div class="box-header with-border">
+                <h3 class="box-title">部署状态</h3>
+            </div>
+            <!-- /.box-header -->
+            <div id="status" class="box-body">
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{{ url_for('static',filename='js/layer/layer.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ url_for('static',filename='js/bootstrapselect/bootstrap-select.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/publish/exists.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/tool/tool.js') }}"></script>
+{% endblock %}

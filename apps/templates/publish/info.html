@@ -1,0 +1,36 @@
+{% extends 'publish/base.html' %}
+{% block box_title %}
+    {{ title }}
+{% endblock %}
+{% block css %}
+    {{ super() }}
+    <link rel="stylesheet" href="">
+{% endblock %}
+{% block box_body %}
+    <div class="table-responsive ">
+        <div id="toolbar" class="btn-group" style="margin-bottom: 10px;">
+
+
+        </div>
+        <table id="repotable" width="100%">
+        </table>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{{ url_for('static',filename='js/layer/layer.js') }}"></script>
+    <script type="application/javascript"
+            src="{{ url_for('static',filename='js/datatables/editor/bootstrap-table.js') }}"></script>
+    <script type="application/javascript"
+            src="{{ url_for('static',filename='js/datatables/editor/bootstrap-editable.js') }}"></script>
+    <script type="application/javascript"
+            src="{{ url_for('static',filename='js/datatables/editor/bootstrap-table-editable.js') }}"></script>
+
+    <script type="application/javascript"
+            src="{{ url_for('static',filename='js/datatables/locale/bootstrap-table-zh-cn.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static',filename='js/tool/tool.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/publish/info.js') }}"></script>
+
+
+{% endblock %}

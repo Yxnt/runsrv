@@ -3,13 +3,13 @@
  */
 $(function () {
     $.ajax({
-        url: '/api/salt/minions',
+        url: '/api/salt/minions/',
         type: 'get',
         data: {name: 'celery:task:system', key: 'update_host_list'},
         accepts: 'application/json',
         success: function (data) {
-            $("#client_number").text(data['client_number']);
-            clients = data['clients'];
+            $("#client_number").text(data['total']);
+            clients = data['rows'];
             var label = [];
             for (var i = 0; i < clients.length; i++) {
                 label.push(clients[i]['osinfo']);

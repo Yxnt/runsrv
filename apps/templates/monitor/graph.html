@@ -1,0 +1,60 @@
+{% extends 'monitor/base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+{% block css %}
+    {{ super() }}
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/bootstrapselect/bootstrap-select.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/daterangepicker/daterangepicker.css') }}">
+{% endblock %}
+
+
+
+{% block box_title %}主机监控页面{% endblock %}
+
+{% block box_body %}
+    <div id="toolbar">
+        <div class="row">
+            <div class="col-md-3">
+                <select id="endpoint" class="selectpicker"></select></div>
+            <div class="col-md-3">
+                <select id="counter" class="selectpicker">
+                </select></div>
+            <div class="col-md-4">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-clock-o"></i>
+                    </div>
+                    <input type="text" class="form-control pull-right" id="choise_time">
+                </div>
+            </div>
+            <div class="col-md-1 pull-right">
+                <button class="btn btn-info" id="submit">查询</button>
+            </div>
+        </div>
+
+
+        <div id="graph" style="height:400px;"></div>
+
+
+    </div>
+
+
+
+{% endblock %}
+{% block js %}
+    {{ super() }}
+    <script type="text/javascript"
+            src="{{ url_for('static',filename='js/bootstrapselect/bootstrap-select.min.js') }}"></script>
+    <script src="{{ url_for('static',filename="js/chart/chart.js") }}"></script>
+    <script src="{{ url_for('static',filename="js/daterangepicker/moment.js") }}"
+            type="application/javascript"></script>
+    <script src="{{ url_for('static',filename="js/daterangepicker/daterangepicker.js") }}"
+            type="application/javascript"></script>
+    <script src="{{ url_for('static',filename="js/chart/echarts.js") }}"></script>
+    <script src="{{ url_for('static',filename="js/chart/chart.js") }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename='js/monitor/graph.js') }}"></script>
+
+
+{% endblock %}

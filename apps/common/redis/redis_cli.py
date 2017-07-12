@@ -33,6 +33,15 @@ class Redis(object):
     def hget(self, name, key):
         return self.__r().hget(name, key)
 
+    def lpushx(self,key,value):
+
+        if self.__r().llen(key) != 0:
+            self.__r().lpush(key, value)
+        else:
+            self.__r().lpush(key, value)
+            self.__r().expire(key, 432000)
+
+        return
 
 if __name__ == '__main__':
     r = redis_cli()
