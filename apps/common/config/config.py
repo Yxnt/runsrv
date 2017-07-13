@@ -80,7 +80,7 @@ class DevelopMent(Config):
     MONITOR_ADDR = '127.0.0.1:5002'
 
     # gitlab
-    GITLAB_ADDR = 'https://git.higsq.com:8889'
-    GITLAB_TOKEN_HEADER = {"PRIVATE-TOKEN":"CrzuPZsvM_1xG88Bui-q"}
-    GITLAB_USER = 'root'
-    GITLAB_PASSWORD = 'w.ceUwOoWVKP2'
+    GITLAB_ADDR = ''
+    GITLAB_TOKEN_HEADER = {"PRIVATE-TOKEN":""}
+    GITLAB_USER = ''
+    GITLAB_PASSWORD = ''
