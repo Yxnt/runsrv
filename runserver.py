@@ -5,8 +5,8 @@ import os
 from apps import create_apps, celery
 from apps.models import User, session, Base, engine
 from flask_script import Manager
-from apps.tasks import get_minion_info, system_operator, redis_save, group_save, host_to_group
-from apps.tasks import send_email, get_all_projects,module
+from apps.tasks import update_host_list_to_db, system_operator, redis_save, group_save, host_to_group
+from apps.tasks import send_email, get_all_projects,module,login
 
 from celery.schedules import crontab
 
@@ -24,6 +24,10 @@ celery.conf.beat_schedule = {
         'task': 'apps.tasks.sender.email.send_email',
         'schedule': crontab()
     },
+    'salt_login':{
+        'task': 'apps.tasks.saltstack.login',
+        'schedule': crontab(hour='8')
+    }
 }
 
 

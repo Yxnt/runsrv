@@ -165,7 +165,7 @@ class FileDownload(Resource):
 
         while True:
             ret = current_app.salt.jid(jid)
-
+            
             if ret['return'][0]:
                 break
             sleep(1)

@@ -1,6 +1,6 @@
 from flask import current_app
 from flask_restful import Resource, reqparse, fields, marshal_with
-from apps.tasks import get_minion_info, system_operator
+from apps.tasks import update_host_list_to_db, system_operator
 from apps.models import Host, session
 from apps.tasks import redis_save
 from apps.common.apiauth.auth import user_auth
@@ -58,6 +58,6 @@ class Minions(Resource):
             return {"total": client_number, "rows": info}
 
     def post(self):
-        operator = get_minion_info.delay()
+        operator = update_host_list_to_db.delay()
         system_operator.delay("update_host_list", operator.id)
         return current_app.make_res(200, 200, "执行成功", uuid=operator.id)

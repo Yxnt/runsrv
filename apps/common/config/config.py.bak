@@ -42,7 +42,6 @@ class DevelopMent(Config):
     SALT_EAUTH = 'pam'
     SALT_PORT = 8000
     SALT_SSL_ON = False
-    MINIONS_FILE_ROOT = '/var/cache/salt/master/minions'
 
     # redis settings
     REDIS_HOST = '10.106.0.210'

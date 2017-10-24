@@ -20,9 +20,9 @@ def email(message):
     msg = MIMEText(message)
 
     msg['Subject'] = '服务器发现异常'
-    msg['From'] = 'yandou@higsq.com'
-    msg['To'] = 'j__xnt@163.com'
+    msg['From'] = ''
+    msg['To'] = ''
 
     with smtplib.SMTP('smtp.exmail.qq.com') as smtp:
-        smtp.login('yandou@higsq.com','Yxnhuiyideshiyan1')
+        smtp.login('','')
         smtp.send_message(msg)

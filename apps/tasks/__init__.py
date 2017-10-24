@@ -1,4 +1,4 @@
-from apps.tasks.saltstack import get_minion_info, module
+from apps.tasks.saltstack import update_host_list_to_db,module,login
 from apps.tasks.redis import system_operator, redis_save
 from apps.tasks.db import group_save, host_to_group
 from apps.tasks.monitor import hostmonitor
